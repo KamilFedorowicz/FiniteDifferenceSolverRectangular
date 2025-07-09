@@ -9,7 +9,7 @@ public:
     static const std::vector<std::vector<double>> compute(const Grid& grid,
                                                           const std::vector<std::vector<double>>& scalarField){
         std::vector<std::vector<double>> result(grid.ny, std::vector<double>(grid.nx, 0));
-        
+
         double dx = grid.x[1] - grid.x[0];
         double dy = grid.y[1] - grid.y[0];
         
