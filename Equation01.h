@@ -12,7 +12,12 @@
 class Equation01 : public EquationBase {
 public:
     Equation01(Grid& grid, double diffusionCoeff, double dt, const SourceTerm& source)
-        : grid(grid), D(diffusionCoeff), dt(dt), source(source) {}
+        : grid(grid), D(diffusionCoeff), dt(dt), source(source) 
+    {
+        // initial field set to 0 by default
+        const std::vector<std::vector<double>> initField(grid.ny, std::vector<double>(grid.nx, 0));
+        initializeField(initField);
+    }
 
     void initializeField(const std::vector<std::vector<double>>& initialField) {
         field = initialField;
@@ -21,11 +26,14 @@ public:
     void step(const BoundaryCondition& bc) override {
         auto laplacian = Laplacian::compute(grid, field);
         auto sourceField = source.compute(grid);
+        // std::cout << "Working here" << std::endl;
 
-        // main equation of the model
-        auto dField_dt = D * laplacian + sourceField;
-
+        auto dField_dt = D * laplacian + sourceField; // this line does not work
+        
         field = field + dt * dField_dt;
+
+        
+
 
         bc.apply(field, grid);
     }

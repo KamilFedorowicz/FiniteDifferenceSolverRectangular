@@ -24,6 +24,7 @@ public:
     void setSouthType(BCType type) { south_type = type; }
 
 
+
 private:
     // === Wall BC parameters ===
     double east_value = 0.0, west_value = 0.0, north_value = 0.0, south_value = 0.0;

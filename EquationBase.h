@@ -11,7 +11,9 @@ public:
 
     virtual void step(const BoundaryCondition& bc) = 0;
     virtual void solve(int steps, const BoundaryCondition& bc) {
+        
         for (int i = 0; i < steps; ++i) {
+            
             step(bc);
         }
     }

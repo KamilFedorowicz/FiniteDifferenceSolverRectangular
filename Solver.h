@@ -9,6 +9,7 @@ public:
     Solver(EquationBase& eq) : equation(eq) {}
 
     void solve(int steps, const BoundaryCondition& bc) {
+        
         equation.solve(steps, bc);
     }
 

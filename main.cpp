@@ -20,13 +20,16 @@ void print(const std::vector<std::vector<double>>& field) {
 
 int main() {
 
-    Grid grid(0, 0, 1, 1, 20, 20);
+    int nx = 20;
+    int ny = 40;
+    Grid grid(0, 0, 1, 1, nx, ny);
 
-    std::vector<std::vector<double>> initialField(20, std::vector<double>(20, 0.0));
+    
 
     SourceTerm source(1.0);
-    Equation01 eq(grid, 0.1, 0.001, source);
-    eq.initializeField(initialField);
+    Equation01 eq(grid, 0.1, 0.001, source); // arguments: grid, D, dt, source
+    std::vector<std::vector<double>> initialField(ny, std::vector<double>(nx, 0.0));
+    // eq.initializeField(initialField); // no need to initialise the field because this is done in the constructor
 
     MyBoundaryCondition bc;
     bc.setNorthType(BCType::FixedValue);
@@ -34,12 +37,14 @@ int main() {
     bc.setSouthType(BCType::FixedValue);
     bc.setSouthValue(0.0);
     bc.setEastType(BCType::ZeroGradient);
-    //bc.setEastValue(0.0);
+    bc.setEastValue(0.0);
     bc.setWestType(BCType::ZeroGradient);
     //bc.setWestValue(0.0);
 
+    // std::cout << "Working here" << std::endl;
+
     Solver solver(eq);
-    solver.solve(1000, bc);
+    solver.solve(5000, bc);
 
     // === Export result ===
     CSVExporter::saveToCSVWithCoordinates(grid, solver.getResult(), "result.csv");
