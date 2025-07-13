@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 #include <vector>
-#include "grid.h"
+#include "Grid.h"
 
 class Gradient{
 public:

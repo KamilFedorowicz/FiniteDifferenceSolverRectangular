@@ -13,9 +13,12 @@ public:
     virtual void solve(int steps, const BoundaryCondition& bc) {
         
         for (int i = 0; i < steps; ++i) {
-            
             step(bc);
         }
+    }
+    
+    virtual const std::vector<std::vector<double>>& getField(const std::string& name) const {
+        throw std::runtime_error("getField(name) not implemented in derived class");
     }
 
     virtual const std::vector<std::vector<double>>& getField() const = 0;

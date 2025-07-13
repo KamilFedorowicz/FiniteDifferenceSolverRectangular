@@ -8,6 +8,7 @@
 #include "MyBoundaryCondition.h"
 #include "Solver.h"
 #include "MathOperators.h"
+#include "VariableMonitor.h"
 
 // Optional: helper to print 2D field
 void print(const std::vector<std::vector<double>>& field) {
@@ -27,8 +28,8 @@ int main() {
     
 
     SourceTerm source(1.0);
-    Equation01 eq(grid, 0.1, 0.001, source); // arguments: grid, D, dt, source
-    std::vector<std::vector<double>> initialField(ny, std::vector<double>(nx, 0.0));
+    Equation01 eq(grid, 0.1, 0.002, source); // arguments: grid, D, dt, source
+    //std::vector<std::vector<double>> initialField(ny, std::vector<double>(nx, 0.0));
     // eq.initializeField(initialField); // no need to initialise the field because this is done in the constructor
 
     MyBoundaryCondition bc;
@@ -42,13 +43,24 @@ int main() {
     //bc.setWestValue(0.0);
 
     // std::cout << "Working here" << std::endl;
+    
+    VariableMonitor monitor1(grid, 0.2, 0.2);
+    VariableMonitor monitor2(grid, 0.3, 0.3);
 
-    Solver solver(eq);
+    Solver solver(eq, grid);
+    
+    solver.addVariableMonitor(monitor1);
+    solver.addVariableMonitor(monitor2);
+    
+    
     solver.solve(5000, bc);
+    
 
     // === Export result ===
-    CSVExporter::saveToCSVWithCoordinates(grid, solver.getResult(), "result.csv");
-
+    CSVExporter::saveToCSVWithCoordinates(grid, solver.getResult(), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/result.csv");
+    CSVExporter::saveMonitoredVariable(monitor1.returnMonitoredVariable(), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/time_plot1.csv");
+    CSVExporter::saveMonitoredVariable(monitor2.returnMonitoredVariable(), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/time_plot2.csv");
+    
     std::cout << "Simulation completed. Output saved to result.csv\n";
 
 

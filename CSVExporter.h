@@ -25,4 +25,23 @@ public:
 
         file.close();
     }
+    
+    static void saveMonitoredVariable(const std::vector<double>& monitoredData,
+                                      const std::string& filename)
+    {
+        std::ofstream file(filename);
+        if (!file.is_open()) {
+            throw std::runtime_error("Failed to open file: " + filename);
+        }
+
+        file << "step,value\n";
+
+        for (size_t step = 0; step < monitoredData.size(); ++step) {
+            file << step << "," << monitoredData[step] << "\n";
+        }
+
+        file.close();
+    }
+    
+    
 };
