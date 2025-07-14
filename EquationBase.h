@@ -17,9 +17,6 @@ public:
         }
     }
     
-    virtual const std::vector<std::vector<double>>& getField(const std::string& name) const {
-        throw std::runtime_error("getField(name) not implemented in derived class");
-    }
-
-    virtual const std::vector<std::vector<double>>& getField() const = 0;
+    // we use string name as the name for the field to distinguish different fields that we have
+    virtual const std::vector<std::vector<double>> getField(std::string name) const = 0;
 };

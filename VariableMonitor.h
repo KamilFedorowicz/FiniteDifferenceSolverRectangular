@@ -5,7 +5,7 @@
 
 class VariableMonitor{
 public:
-    VariableMonitor(Grid& grid, double x, double y): grid(grid), monitor_x(x), monitor_y(y){
+    VariableMonitor(Grid& grid, double x, double y, std::string name): grid(grid), monitor_x(x), monitor_y(y), varName(name){
         ix = static_cast<int>(grid.nx * monitor_x / grid.end_x);
         iy = static_cast<int>(grid.ny * monitor_y / grid.end_y);
     }
@@ -34,6 +34,10 @@ public:
         return iy;
     }
     
+    std::string getName(){
+        return varName;
+    }
+    
     
 private:
     double monitor_x = 0;
@@ -41,5 +45,6 @@ private:
     Grid& grid;
     int ix, iy; // integers that store the number of monitored cell
     std::vector<double> monitoredVariable{};
+    std::string varName;
     
 };

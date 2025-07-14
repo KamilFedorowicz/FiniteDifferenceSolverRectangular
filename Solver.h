@@ -3,6 +3,7 @@
 #include "BoundaryCondition.h"
 #include "Grid.h"
 #include "VariableMonitor.h"
+#include <map>
 
 // take the solving process away from the equation
 
@@ -15,17 +16,19 @@ public:
     void solve(int steps, const BoundaryCondition& bc) {
         for (int i = 0; i < steps; ++i) {
             equation.step(bc);  // one time step. function defined in Equation01 etc
-            for(VariableMonitor* var:monitoredVariablesVector){
+            
+            // monitoring variable evolution
+            for(VariableMonitor* var: monitoredVariablesVector){
                 int ix = var->getIx();
                 int iy = var->getIy();
-                var->update(getResult()[ix][iy]);
+                var->update(getResult(var->getName())[ix][iy]);
             }
 
         }
     }
     
-    const std::vector<std::vector<double>>& getResult() const {
-        return equation.getField();
+    const std::vector<std::vector<double>> getResult(std::string name) const {
+        return equation.getField(name);
     }
     
     void addVariableMonitor(VariableMonitor& var){
@@ -37,4 +40,5 @@ private:
     std::vector<std::vector<double>> field;
     Grid& grid;
     std::vector<VariableMonitor*> monitoredVariablesVector;
+    
 };

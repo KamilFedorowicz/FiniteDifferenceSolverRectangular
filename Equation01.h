@@ -6,6 +6,7 @@
 #include "BoundaryCondition.h"
 #include "EquationBase.h"
 #include "MathOperators.h"
+#include <map>
 
 // detailed implementation of the equation
 
@@ -35,8 +36,16 @@ public:
     }
 
     // we need this to keep the field public
-    const std::vector<std::vector<double>>& getField() const override {
-        return field;
+    const std::vector<std::vector<double>> getField(std::string name) const override {
+        if(name==fieldName1){
+            return field;
+        } // add here more ifs if more field types
+        else
+        {
+            std::vector<std::vector<double>> zeroField(field.size(), std::vector<double>(field[0].size(), 0.0));
+                return zeroField;
+        }
+        
     }
 
 private:
@@ -44,5 +53,7 @@ private:
     double D;
     double dt;
     std::vector<std::vector<double>> field;
+    std::string fieldName1 = "field01";
     const SourceTerm& source;
+    
 };

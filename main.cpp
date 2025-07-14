@@ -44,8 +44,8 @@ int main() {
 
     // std::cout << "Working here" << std::endl;
     
-    VariableMonitor monitor1(grid, 0.2, 0.2);
-    VariableMonitor monitor2(grid, 0.3, 0.3);
+    VariableMonitor monitor1(grid, 0.2, 0.2, "field01");
+    VariableMonitor monitor2(grid, 0.3, 0.3, "field01");
 
     Solver solver(eq, grid);
     
@@ -57,7 +57,7 @@ int main() {
     
 
     // === Export result ===
-    CSVExporter::saveToCSVWithCoordinates(grid, solver.getResult(), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/result.csv");
+    CSVExporter::saveToCSVWithCoordinates(grid, solver.getResult("field01"), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/result.csv");
     CSVExporter::saveMonitoredVariable(monitor1.returnMonitoredVariable(), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/time_plot1.csv");
     CSVExporter::saveMonitoredVariable(monitor2.returnMonitoredVariable(), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/time_plot2.csv");
     
