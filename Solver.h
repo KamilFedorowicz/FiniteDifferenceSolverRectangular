@@ -13,9 +13,9 @@ public:
         monitoredVariablesVector={};
     }
 
-    void solve(int steps, const BoundaryCondition& bc) {
+    void solve(int steps, const std::vector<const BoundaryCondition*>& bcs) {
         for (int i = 0; i < steps; ++i) {
-            equation.step(bc);  // one time step. function defined in Equation01 etc
+            equation.step(bcs);  // one time step. function defined in Equation01 etc
             
             // monitoring variable evolution
             for(VariableMonitor* var: monitoredVariablesVector){

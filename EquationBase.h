@@ -9,11 +9,10 @@ class EquationBase {
 public:
     virtual ~EquationBase() = default;
 
-    virtual void step(const BoundaryCondition& bc) = 0;
-    virtual void solve(int steps, const BoundaryCondition& bc) {
-        
+    virtual void step(const std::vector<const BoundaryCondition*>& bcs) = 0;
+    virtual void solve(int steps, const std::vector<const BoundaryCondition*>& bcs) {
         for (int i = 0; i < steps; ++i) {
-            step(bc);
+            step(bcs);
         }
     }
     

@@ -1,14 +1,16 @@
 #pragma once
 #include <vector>
+#include <stdexcept>
 
 // Multiply scalar * 2D vector
-std::vector<std::vector<double>> operator*(double scalar,
+inline std::vector<std::vector<double>> operator*(
+    double scalar,
     const std::vector<std::vector<double>>& matrix)
 {
-    std::vector<std::vector<double>> result = matrix; // copy
+    std::vector<std::vector<double>> result = matrix;
 
-    for (int i = 0; i < matrix.size(); i++) {
-        for (int j = 0; j < matrix[0].size(); j++) {
+    for (size_t i = 0; i < matrix.size(); ++i) {
+        for (size_t j = 0; j < matrix[0].size(); ++j) {
             result[i][j] *= scalar;
         }
     }
@@ -16,29 +18,28 @@ std::vector<std::vector<double>> operator*(double scalar,
     return result;
 }
 
-std::vector<std::vector<double>> operator*(const std::vector<std::vector<double>>& matrix, double scalar)
+inline std::vector<std::vector<double>> operator*(
+    const std::vector<std::vector<double>>& matrix,
+    double scalar)
 {
-    std::vector<std::vector<double>> result = matrix; // copy
-
-    for (int i = 0; i < matrix.size(); i++) {
-        for (int j = 0; j < matrix[0].size(); j++) {
-            result[i][j] *= scalar;
-        }
-    }
-    
-    return result;
+    return scalar * matrix; // reuse the other overload
 }
 
-std::vector<std::vector<double>> operator+(const std::vector<std::vector<double>>& matrix1, const std::vector<std::vector<double>>& matrix2) 
+inline std::vector<std::vector<double>> operator+(
+    const std::vector<std::vector<double>>& matrix1,
+    const std::vector<std::vector<double>>& matrix2)
 {
-    std::vector<std::vector<double>> result = matrix1; // copy
-    
-    for (int i = 0; i < matrix1.size(); i++) {
-        for (int j = 0; j < matrix1[0].size(); j++) {
+    if (matrix1.size() != matrix2.size() || matrix1[0].size() != matrix2[0].size()) {
+        throw std::invalid_argument("Matrix size mismatch in operator+");
+    }
+
+    std::vector<std::vector<double>> result = matrix1;
+
+    for (size_t i = 0; i < matrix1.size(); ++i) {
+        for (size_t j = 0; j < matrix1[0].size(); ++j) {
             result[i][j] += matrix2[i][j];
         }
     }
-    
+
     return result;
 }
-

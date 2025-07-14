@@ -32,20 +32,35 @@ int main() {
     //std::vector<std::vector<double>> initialField(ny, std::vector<double>(nx, 0.0));
     // eq.initializeField(initialField); // no need to initialise the field because this is done in the constructor
 
-    MyBoundaryCondition bc;
-    bc.setNorthType(BCType::FixedValue);
-    bc.setNorthValue(0.0);
-    bc.setSouthType(BCType::FixedValue);
-    bc.setSouthValue(0.0);
-    bc.setEastType(BCType::ZeroGradient);
-    bc.setEastValue(0.0);
-    bc.setWestType(BCType::ZeroGradient);
-    //bc.setWestValue(0.0);
+    MyBoundaryCondition bc_temp;
+    bc_temp.setNorthType(BCType::FixedValue);
+    bc_temp.setNorthValue(0.0);
+    bc_temp.setSouthType(BCType::FixedValue);
+    bc_temp.setSouthValue(0.0);
+    bc_temp.setEastType(BCType::ZeroGradient);
+    bc_temp.setEastValue(0.0);
+    bc_temp.setWestType(BCType::ZeroGradient);
+    
+    MyBoundaryCondition bc_pres;
+    bc_pres.setNorthType(BCType::FixedValue);
+    bc_pres.setNorthValue(1.0);
+    bc_pres.setSouthType(BCType::FixedValue);
+    bc_pres.setSouthValue(1.0);
+    bc_pres.setEastType(BCType::FixedValue);
+    bc_pres.setEastValue(1.0);
+    bc_pres.setWestType(BCType::FixedValue);
+    bc_pres.setWestValue(1.0);
+
+    std::vector<const BoundaryCondition*> bcs;
+    bcs.push_back(&bc_temp);
+    bcs.push_back(&bc_pres);
+
 
     // std::cout << "Working here" << std::endl;
     
-    VariableMonitor monitor1(grid, 0.2, 0.2, "field01");
-    VariableMonitor monitor2(grid, 0.3, 0.3, "field01");
+    // something is wrong with VariableMonitor
+    VariableMonitor monitor1(grid, 0.4, 0.4, "temperature");
+    VariableMonitor monitor2(grid, 0.4, 0.4, "pressure");
 
     Solver solver(eq, grid);
     
@@ -53,11 +68,11 @@ int main() {
     solver.addVariableMonitor(monitor2);
     
     
-    solver.solve(5000, bc);
+    solver.solve(5000, bcs);
     
 
     // === Export result ===
-    CSVExporter::saveToCSVWithCoordinates(grid, solver.getResult("field01"), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/result.csv");
+    CSVExporter::saveToCSVWithCoordinates(grid, solver.getResult("temperature"), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/result.csv");
     CSVExporter::saveMonitoredVariable(monitor1.returnMonitoredVariable(), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/time_plot1.csv");
     CSVExporter::saveMonitoredVariable(monitor2.returnMonitoredVariable(), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/time_plot2.csv");
     

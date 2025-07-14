@@ -7,6 +7,7 @@
 #include "EquationBase.h"
 #include "MathOperators.h"
 #include <map>
+#include "MathOperators.h"
 
 // detailed implementation of the equation
 
@@ -21,28 +22,54 @@ public:
     }
 
     void initializeField(const std::vector<std::vector<double>>& initialField) {
-        field = initialField;
+        temperature = initialField;
+        pressure = initialField;
     }
 
+    /*
     void step(const BoundaryCondition& bc) override {
-        auto laplacian = Laplacian::compute(grid, field);
+        auto laplacian = Laplacian::compute(grid, temperature);
         auto sourceField = source.compute(grid);
         // std::cout << "Working here" << std::endl;
 
         auto dField_dt = D * laplacian + sourceField; // this line does not work
         
-        field = field + dt * dField_dt;
-        bc.apply(field, grid);
+        temperature = temperature + dt * dField_dt;
+        pressure = 2*temperature;
+        bc.apply(temperature, grid);
     }
+    */
+    
+    void step(const std::vector<const BoundaryCondition*>& bcs) override {
+        auto laplacianTemp = Laplacian::compute(grid, temperature);
+        auto laplacianPres = Laplacian::compute(grid, pressure);
+        auto sourceFieldTemp = source.compute(grid);
+        // std::cout << "Working here" << std::endl;
+
+        auto dTemp_dt = D * laplacianTemp + sourceFieldTemp; // this line does not work
+        temperature = temperature + dt * dTemp_dt;
+        
+        auto dPres_dt = D * laplacianPres; // this line does not work
+        pressure = pressure + dt * dPres_dt;
+        
+        
+        bcs[0]->apply(temperature, grid);
+        bcs[1]->apply(pressure, grid);
+        
+    }
+    
+    
 
     // we need this to keep the field public
     const std::vector<std::vector<double>> getField(std::string name) const override {
         if(name==fieldName1){
-            return field;
+            return temperature;
         } // add here more ifs if more field types
-        else
-        {
-            std::vector<std::vector<double>> zeroField(field.size(), std::vector<double>(field[0].size(), 0.0));
+        else if(name==fieldName2){
+            return pressure;
+        } else{
+            std::cout << "Incorrect name, returning zero field!" << std::endl;
+            std::vector<std::vector<double>> zeroField(temperature.size(), std::vector<double>(temperature[0].size(), 0.0));
                 return zeroField;
         }
         
@@ -52,8 +79,10 @@ private:
     Grid& grid;
     double D;
     double dt;
-    std::vector<std::vector<double>> field;
-    std::string fieldName1 = "field01";
+    std::vector<std::vector<double>> temperature;
+    std::string fieldName1 = "temperature";
+    std::vector<std::vector<double>> pressure;
+    std::string fieldName2 = "pressure";
     const SourceTerm& source;
     
 };
