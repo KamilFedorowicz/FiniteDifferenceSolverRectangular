@@ -20,10 +20,15 @@ public:
         double step_x = (end_x - start_x) / (nx - 1);
         double step_y = (end_y - start_y) / (ny - 1);
 
-        for (int i = 0; i < nx; ++i)
-            x.push_back(start_x + i * step_x);
-        for (int i = 0; i < ny; ++i)
-            y.push_back(start_y + i * step_y);
+            for (int i = 0; i < nx; ++i){
+                x.push_back(start_x + i * step_x);
+            }
+            
+            for (int i = 0; i < ny; ++i){
+                y.push_back(start_y + i * step_y);
+            }
+            
+
     }
 
     ~Grid() = default;
