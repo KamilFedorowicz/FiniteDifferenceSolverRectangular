@@ -21,7 +21,7 @@ public:
             for(VariableMonitor* var: monitoredVariablesVector){
                 int ix = var->getIx();
                 int iy = var->getIy();
-                var->update(getResult(var->getName())[ix][iy]);
+                var->update(getResult(var->getName())[iy][ix]);
             }
 
         }

@@ -60,7 +60,7 @@ int main() {
     
     // something is wrong with VariableMonitor
     VariableMonitor monitor1(grid, 0.4, 0.4, "temperature");
-    VariableMonitor monitor2(grid, 0.4, 0.4, "pressure");
+    VariableMonitor monitor2(grid, 0.6, 0.6, "pressure");
 
     Solver solver(eq, grid);
     
