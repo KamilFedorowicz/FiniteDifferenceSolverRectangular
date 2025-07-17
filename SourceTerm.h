@@ -12,7 +12,7 @@ public:
 
     // Override this method to define a spatially varying source
     virtual std::vector<std::vector<double>> compute(const Grid& grid) const {
-        std::vector<std::vector<double>> source(grid.ny, std::vector<double>(grid.nx, constantSource));
+        std::vector<std::vector<double>> source(grid.get_ny(), std::vector<double>(grid.get_nx(), constantSource));
         return source;
     }
 

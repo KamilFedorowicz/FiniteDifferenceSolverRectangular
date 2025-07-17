@@ -15,6 +15,7 @@ public:
 
     void solve(int steps, const std::vector<const BoundaryCondition*>& bcs) {
         for (int i = 0; i < steps; ++i) {
+            std::cout << "Step: " << i << std::endl;
             equation.step(bcs);  // one time step. function defined in Equation01 etc
             
             // monitoring variable evolution

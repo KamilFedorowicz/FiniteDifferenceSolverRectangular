@@ -13,7 +13,7 @@
 
 void runCase1_Equation01(){
     int nx = 40;
-    int ny = 40;
+    int ny = 50;
     Grid grid(0, 0, 1, 1, nx, ny);
     
     

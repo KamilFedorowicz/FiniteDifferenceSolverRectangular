@@ -6,8 +6,8 @@
 class VariableMonitor{
 public:
     VariableMonitor(Grid& grid, double x, double y, std::string name): grid(grid), monitor_x(x), monitor_y(y), varName(name){
-        ix = static_cast<int>(grid.nx * monitor_x / grid.end_x);
-        iy = static_cast<int>(grid.ny * monitor_y / grid.end_y);
+        ix = static_cast<int>(grid.get_nx() * monitor_x / grid.get_x_lim(1));
+        iy = static_cast<int>(grid.get_ny() * monitor_y / grid.get_y_lim(1));
     }
     ~VariableMonitor() = default;
     

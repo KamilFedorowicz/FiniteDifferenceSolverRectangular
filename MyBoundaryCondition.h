@@ -47,8 +47,8 @@ private:
     std::vector<double> obstacle_value;
 
     void applyWallBCs(std::vector<std::vector<double>>& field, const Grid& grid) const {
-        int nx = grid.nx;
-        int ny = grid.ny;
+        int nx = grid.get_nx();
+        int ny = grid.get_ny();
 
         // WEST
         for (int i = 0; i < ny; ++i)
@@ -79,10 +79,10 @@ private:
             double value_o = value_obs[obs_count];
             
             
-            for(int i=0; i<grid.ny; i++){
-                for(int j=0; j<grid.nx; j++){
-                    double x_field = grid.start_x + (grid.end_x - grid.start_x)*j/grid.nx;
-                    double y_field = grid.start_y + (grid.end_y - grid.start_y)*i/grid.ny;
+            for(int i=0; i<grid.get_ny(); i++){
+                for(int j=0; j<grid.get_nx(); j++){
+                    double x_field = grid.get_x_lim(0) + (grid.get_x_lim(1) - grid.get_x_lim(0))*j/grid.get_nx();
+                    double y_field = grid.get_y_lim(0) + (grid.get_y_lim(1) - grid.get_y_lim(0))*i/grid.get_ny();
                     
                     
                     if(x_o_east>=x_field && x_o_west<=x_field && y_o_south<=y_field && y_o_north>=y_field){

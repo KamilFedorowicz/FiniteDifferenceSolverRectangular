@@ -4,14 +4,49 @@
 #include <iomanip>
 #include <fstream>   // For std::ofstream
 #include <string>    // For std::string
+#include <cassert> // for assert
 
 class Grid {
 public:
-    const int nx, ny;
-    std::vector<double> x, y;
-    double start_x = 0, start_y = 0;
-    double end_x = 1, end_y = 1;
+    
+    double get_x(int i) const {
+        assert(i>=0 && i<=nx);
+        return x[i];
+    }
+    
+    double get_y(int i) const {
+        assert(i>=0 && i<=ny);
+        return y[i];
+    }
+    
+    const double get_x_lim(int i) const {
+        assert(i==0 || i==1);
+        if(i==0){
+            return start_x;
+        } else if(i==1){
+            return end_x;
+        }
+        
+        return 0; // this should never happen
+    }
+    
+    const double get_y_lim(int i) const {
+        assert(i==0 || i==1);
+        if(i==0){
+            return start_y;
+        } else if(i==1){
+            return end_y;
+        }
+        
+        return 0; // this should never happen
+    }
 
+    const int get_nx() const {
+        return nx;
+    }
+    const int get_ny() const {
+        return ny;
+    }
 
 
 
@@ -27,11 +62,15 @@ public:
             for (int i = 0; i < ny; ++i){
                 y.push_back(start_y + i * step_y);
             }
-            
-
     }
 
     ~Grid() = default;
+    
+private:
+    const int nx, ny;
+    std::vector<double> x, y;
+    double start_x = 0, start_y = 0;
+    double end_x = 1, end_y = 1;
 
 
 };

@@ -17,9 +17,9 @@ public:
 
         file << "x,y,value\n";
 
-        for (int i = 0; i < grid.ny; ++i) {
-            for (int j = 0; j < grid.nx; ++j) {
-                file << grid.x[j] << "," << grid.y[i] << "," << data[i][j] << "\n";
+        for (int i = 0; i < grid.get_ny(); ++i) {
+            for (int j = 0; j < grid.get_nx(); ++j) {
+                file << grid.get_x(j) << "," << grid.get_y(i) << "," << data[i][j] << "\n";
             }
         }
 

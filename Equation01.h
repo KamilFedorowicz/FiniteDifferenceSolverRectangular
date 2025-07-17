@@ -17,7 +17,7 @@ public:
         : grid(grid), D(diffusionCoeff), dt(dt), source(source)
     {
         // initial field set to 0 by default
-        const std::vector<std::vector<double>> initField(grid.ny, std::vector<double>(grid.nx, 0));
+        const std::vector<std::vector<double>> initField(grid.get_ny(), std::vector<double>(grid.get_nx(), 0));
         initializeField(initField);
     }
 
@@ -25,20 +25,6 @@ public:
         temperature = initialField;
         pressure = initialField;
     }
-
-    /*
-    void step(const BoundaryCondition& bc) override {
-        auto laplacian = Laplacian::compute(grid, temperature);
-        auto sourceField = source.compute(grid);
-        // std::cout << "Working here" << std::endl;
-
-        auto dField_dt = D * laplacian + sourceField; // this line does not work
-        
-        temperature = temperature + dt * dField_dt;
-        pressure = 2*temperature;
-        bc.apply(temperature, grid);
-    }
-    */
     
     void step(const std::vector<const BoundaryCondition*>& bcs) override {
         auto laplacianTemp = Laplacian::compute(grid, temperature);
@@ -58,8 +44,6 @@ public:
         
     }
     
-    
-
     // we need this to keep the field public
     const std::vector<std::vector<double>> getField(std::string name) const override {
         if(name==fieldName1){
