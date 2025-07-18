@@ -12,6 +12,8 @@ void print(const std::vector<std::vector<double>>& field) {
 
 int main() {
 
+    // next to do: BCs, source (vector-dependent?) for a vector, then vector differential equation
+    
     runCase1_Equation01();
 
     return 0;

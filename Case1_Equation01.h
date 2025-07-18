@@ -63,7 +63,7 @@ void runCase1_Equation01(){
     solver.addVariableMonitor(monitor2);
     
     
-    solver.solve(5000, bcs);
+    solver.solve(1000, bcs);
     
     
     // === Export result ===
