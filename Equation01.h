@@ -13,7 +13,7 @@
 
 class Equation01 : public EquationBase {
 public:
-    Equation01(Grid& grid, double diffusionCoeff, double dt, const SourceTerm& source)
+    Equation01(Grid& grid, double diffusionCoeff, double dt, const SourceTermScalar& source)
         : grid(grid), D(diffusionCoeff), dt(dt), source(source)
     {
         // initial field set to 0 by default
@@ -45,7 +45,7 @@ public:
     }
     
     // we need this to keep the field public
-    const std::vector<std::vector<double>> getField(std::string name) const override {
+    const std::vector<std::vector<double>>& getFieldScalar(std::string name) const {
         if(name==fieldName1){
             return temperature;
         } // add here more ifs if more field types
@@ -67,6 +67,6 @@ private:
     std::string fieldName1 = "temperature";
     std::vector<std::vector<double>> pressure;
     std::string fieldName2 = "pressure";
-    const SourceTerm& source;
+    const SourceTermScalar& source;
     
 };

@@ -18,18 +18,21 @@ public:
             std::cout << "Step: " << i << std::endl;
             equation.step(bcs);  // one time step. function defined in Equation01 etc
             
+            /*
+            // comment for now because we are using getResultScalar - not sure what to do with it
             // monitoring variable evolution
             for(VariableMonitor* var: monitoredVariablesVector){
                 int ix = var->getIx();
                 int iy = var->getIy();
-                var->update(getResult(var->getName())[iy][ix]);
+                var->update(getResultScalar(var->getName())[iy][ix]);
             }
+            */
 
         }
     }
     
-    const std::vector<std::vector<double>> getResult(std::string name) const {
-        return equation.getField(name);
+    const std::vector<std::vector<double>> getResultScalar(std::string name) const {
+        return equation.getFieldScalar(name);
     }
     
     void addVariableMonitor(VariableMonitor& var){

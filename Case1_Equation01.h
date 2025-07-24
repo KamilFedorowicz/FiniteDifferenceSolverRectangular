@@ -16,9 +16,7 @@ void runCase1_Equation01(){
     int ny = 50;
     Grid grid(0, 0, 1, 1, nx, ny);
     
-    
-    
-    SourceTerm source(1.0);
+    SourceTermScalar source(1.0);
     Equation01 eq(grid, 0.1, 0.001, source); // arguments: grid, D, dt, source
     //std::vector<std::vector<double>> initialField(ny, std::vector<double>(nx, 0.0));
     // eq.initializeField(initialField); // no need to initialise the field because this is done in the constructor
@@ -67,9 +65,17 @@ void runCase1_Equation01(){
     
     
     // === Export result ===
-    CSVExporter::saveToCSVWithCoordinates(grid, solver.getResult("temperature"), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/result.csv");
+    // on mac
+    /*
+    CSVExporter::saveToCSVWithCoordinates(grid, solver.getResultScalar("temperature"), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/result.csv");
     CSVExporter::saveMonitoredVariable(monitor1.returnMonitoredVariable(), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/time_plot1.csv");
     CSVExporter::saveMonitoredVariable(monitor2.returnMonitoredVariable(), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/time_plot2.csv");
+    */
+
+    // on windows
+    CSVExporter::saveToCSVWithCoordinates(grid, solver.getResultScalar("temperature"), "C:/Users/kfedorowicz/source/repos/my_solver2/result.csv");
+    CSVExporter::saveMonitoredVariable(monitor1.returnMonitoredVariable(), "C:/Users/kfedorowicz/source/repos/my_solver2/time_plot1.csv");
+    CSVExporter::saveMonitoredVariable(monitor2.returnMonitoredVariable(), "C:/Users/kfedorowicz/source/repos/my_solver2/time_plot2.csv");
     
     std::cout << "Simulation completed. Output saved to result.csv\n";
     
