@@ -46,11 +46,11 @@ void runCase1_Equation01(){
     bc_pres.setWestType(BCType::FixedValue);
     bc_pres.setWestValue(1.0);
     
-    std::vector<const BoundaryCondition*> bcs;
-    bcs.push_back(&bc_temp);
-    bcs.push_back(&bc_pres);
+    std::vector<const BoundaryCondition*> scalar_bcs;
+    scalar_bcs.push_back(&bc_temp);
+    scalar_bcs.push_back(&bc_pres);
 
-    std::vector<const BoundaryCondition*> bcs_dummy; // this is for vector boundary conditions. not relevant for this case
+    std::vector<const BoundaryCondition*> vector_bcs; // this is for vector boundary conditions. not relevant for this case
     
     // std::cout << "Working here" << std::endl;
     
@@ -64,7 +64,7 @@ void runCase1_Equation01(){
     solver.addVariableMonitor(monitor2);
     
     
-    solver.solve(2, bcs, bcs_dummy);
+    solver.solve(10, scalar_bcs, vector_bcs);
     
     
     // === Export result ===
