@@ -11,12 +11,17 @@
 #include "VariableMonitor.h"
 
 void runCase1_Equation02() {
-	int nx = 40;
-    int ny = 50;
+	const int nx = 40;
+    const int ny = 50;
     Grid grid(0, 0, 1, 1, nx, ny);
 
     SourceTermVector source({ 0,0 });
     Equation02 eq(grid, 0.1, 0.1, 0.001, source);
+
+    std::vector<std::vector<double>> initialTemperatureField(ny, std::vector<double>(nx, 0.0));
+    std::vector<std::vector<std::vector<double>>> initialDirectorField(ny, std::vector<std::vector<double>>(nx, std::vector<double>{1,0}));
+    eq.initialiseField("temperature", initialTemperatureField);
+    eq.initialiseField("director", initialDirectorField);
 
     MyBoundaryCondition bc_director;
     bc_director.setNorthType(BCType::FixedValue);

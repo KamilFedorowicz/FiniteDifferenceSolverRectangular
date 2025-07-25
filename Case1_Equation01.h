@@ -18,9 +18,11 @@ void runCase1_Equation01(){
     
     SourceTermScalar source(1.0);
     Equation01 eq(grid, 0.1, 0.001, source); // arguments: grid, D, dt, source
-    //std::vector<std::vector<double>> initialField(ny, std::vector<double>(nx, 0.0));
-    // eq.initialiseField(initialField); // no need to initialise the field because this is done in the constructor
+    std::vector<std::vector<double>> initialField(ny, std::vector<double>(nx, 0.0));
     
+    eq.initialiseField("temperature", initialField);
+    eq.initialiseField("pressure", initialField);
+
     MyBoundaryCondition bc_temp;
     bc_temp.setNorthType(BCType::FixedValue);
     bc_temp.setNorthValue(0.0);
@@ -62,7 +64,7 @@ void runCase1_Equation01(){
     solver.addVariableMonitor(monitor2);
     
     
-    solver.solve(10, bcs, bcs_dummy);
+    solver.solve(2, bcs, bcs_dummy);
     
     
     // === Export result ===

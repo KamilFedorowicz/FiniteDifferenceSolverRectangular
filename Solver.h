@@ -14,6 +14,7 @@ public:
     }
 
     void solve(int steps, const std::vector<const BoundaryCondition*>& scalar_bcs, const std::vector<const BoundaryCondition*>& vector_bcs) {
+        equation.checkIfAllVariablesAreInitialised();
         for (int i = 0; i < steps; ++i) {
             std::cout << "Step: " << i << std::endl;
             equation.step(scalar_bcs, vector_bcs);  // one time step. function defined in Equation01 etc
