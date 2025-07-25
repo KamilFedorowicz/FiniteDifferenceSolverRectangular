@@ -22,20 +22,33 @@ public:
 
 
     
-    void step(const std::vector<const BoundaryCondition*>& scalar_bcs, const std::vector<const BoundaryCondition*>& vector_bcs) override {
+    void step(std::map<std::string, const BoundaryCondition*>& scalar_bcs, std::map<std::string, const BoundaryCondition*>& vector_bcs) override {
         auto laplacianTemp = Laplacian::compute(grid, temperature);
         auto laplacianPres = Laplacian::compute(grid, pressure);
         auto sourceFieldTemp = source.compute(grid);
         // std::cout << "Working here" << std::endl;
 
-        auto dTemp_dt = D * laplacianTemp + sourceFieldTemp; // this line does not work
-        temperature = temperature + dt * dTemp_dt;
-        
-        auto dPres_dt = D * laplacianPres; // this line does not work
-        pressure = pressure + dt * dPres_dt;
 
-        scalar_bcs[0]->apply(temperature, grid);
-        scalar_bcs[1]->apply(pressure, grid);
+        auto dTemp_dt = D * laplacianTemp + sourceFieldTemp; // this line does not work        
+        auto dPres_dt = D * laplacianPres; // this line does not work
+
+        /*
+        temperature = temperature + dt * dTemp_dt;
+        pressure = pressure + dt * dPres_dt;
+        */
+
+        dScalarFields_dt["temperature"] = &dTemp_dt;
+        dScalarFields_dt["pressure"] = &dPres_dt;
+
+        for (auto it = dScalarFields_dt.begin(); it != dScalarFields_dt.end(); it++) 
+        {
+            auto fieldName = it->first;
+            auto dField = it->second; // pointer to derivative
+            *(scalarFields[fieldName]) = *(scalarFields[fieldName]) + (*dField) * dt;
+
+            // the first argument of apply is the field that will be updated
+            scalar_bcs.at(fieldName)->apply(*(scalarFields[fieldName]), grid);
+        }
         
     }
     

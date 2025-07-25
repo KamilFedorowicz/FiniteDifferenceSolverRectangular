@@ -34,8 +34,8 @@ void runCase1_Equation02() {
     bc_director.setWestValue({ 0,1 });
     bc_director.setEastValue({ 0,1 });
 
-    std::vector<const BoundaryCondition*> vector_bcs;
-    vector_bcs.push_back(&bc_director);
+    std::map<std::string, const BoundaryCondition*> vector_bcs;
+    vector_bcs["director"] = &bc_director;
 
     MyBoundaryCondition bc_temperature;
     bc_temperature.setNorthType(BCType::FixedValue);
@@ -47,11 +47,11 @@ void runCase1_Equation02() {
     bc_temperature.setWestValue(0);
     bc_temperature.setEastValue(0);
 
-    std::vector<const BoundaryCondition*> scalar_bcs;
-    scalar_bcs.push_back(&bc_temperature);
+    std::map<std::string, const BoundaryCondition*> scalar_bcs;
+    scalar_bcs["temperature"] = &bc_temperature;
 
     Solver solver(eq, grid);
-    solver.solve(100, scalar_bcs, vector_bcs);
+    solver.solve(10, 0.001, scalar_bcs, vector_bcs);
 
      CSVExporter::saveToCSVWithCoordinates(grid, eq.getVectorField("director"), "C:/Users/kfedorowicz/source/repos/my_solver2/director.csv");
      CSVExporter::saveToCSVWithCoordinates(grid, eq.getVectorFieldMagnitude("director"), "C:/Users/kfedorowicz/source/repos/my_solver2/director_mag.csv");

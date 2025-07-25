@@ -10,6 +10,7 @@
 #include "Solver.h"
 #include "MathOperators.h"
 #include "VariableMonitor.h"
+#include <map>
 
 void runCase1_Equation01(){
     int nx = 40;
@@ -46,11 +47,14 @@ void runCase1_Equation01(){
     bc_pres.setWestType(BCType::FixedValue);
     bc_pres.setWestValue(1.0);
     
-    std::vector<const BoundaryCondition*> scalar_bcs;
-    scalar_bcs.push_back(&bc_temp);
-    scalar_bcs.push_back(&bc_pres);
 
-    std::vector<const BoundaryCondition*> vector_bcs; // this is for vector boundary conditions. not relevant for this case
+
+    std::map<std::string, const BoundaryCondition*> scalar_bcs;
+    scalar_bcs["temperature"] = &bc_temp;
+    scalar_bcs["pressure"] = &bc_pres;
+
+
+    std::map<std::string, const BoundaryCondition*> vector_bcs; // this is for vector boundary conditions. not relevant for this case
     
     // std::cout << "Working here" << std::endl;
     
@@ -64,7 +68,7 @@ void runCase1_Equation01(){
     solver.addVariableMonitor(monitor2);
     
     
-    solver.solve(10, scalar_bcs, vector_bcs);
+    solver.solve(100, 0.001, scalar_bcs, vector_bcs);
     
     
     // === Export result ===

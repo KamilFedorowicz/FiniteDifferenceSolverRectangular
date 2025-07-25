@@ -15,8 +15,8 @@ public:
     EquationBase(Grid& grid_) : grid(grid_) {};
     virtual ~EquationBase() = default;
 
-    virtual void step(const std::vector<const BoundaryCondition*>& scalar_bcs, const std::vector<const BoundaryCondition*>& vector_bcs) =0;
-    virtual void solve(int steps, const std::vector<const BoundaryCondition*>& scalar_bcs, const std::vector<const BoundaryCondition*>& vector_bcs) {
+    virtual void step(std::map<std::string, const BoundaryCondition*>& scalar_bcs, std::map<std::string, const BoundaryCondition*>& vector_bcs) =0;
+    virtual void solve(int steps, std::map<std::string, const BoundaryCondition*>& scalar_bcs, std::map<std::string, const BoundaryCondition*>& vector_bcs) {
 
         for (int i = 0; i < steps; ++i) {
             step(scalar_bcs, vector_bcs);
