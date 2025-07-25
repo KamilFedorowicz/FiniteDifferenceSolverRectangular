@@ -20,6 +20,11 @@ public:
             equation.step(scalar_bcs, vector_bcs);  // one time step. function defined in Equation01 etc
         }
     }
+
+    void updateVariables() 
+    {
+
+    }
     
     void addVariableMonitor(VariableMonitor& var){
         monitoredVariablesVector.push_back(&var);

@@ -160,6 +160,9 @@ public:
     std::map< std::string, std::vector<std::vector<double>>* > scalarFields; // the second variable is a reference to the field
     std::map< std::string, std::vector<std::vector<std::vector<double>>>* > vectorFields; // the second variable is a reference to the field
 
+    std::map< std::string, std::vector<std::vector<double>>* > dScalarFields_dt; // the second variable is a reference to the field
+    std::map< std::string, std::vector<std::vector<std::vector<double>>>* > dVectorFields_dt; // the second variable is a reference to the field
+
 private:
     Grid& grid;
 };

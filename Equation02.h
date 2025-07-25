@@ -14,6 +14,7 @@ public:
     Equation02(Grid& grid, double diffusionCoeff_dir, double diffusionCoeff_temp, double dt, const SourceTermVector& source)
         : grid(grid), D_director(diffusionCoeff_dir), D_temperature(diffusionCoeff_temp), dt(dt), source(source), EquationBase(grid)
     {
+        // declare fields that we solve for
          vectorFields["director"] = &director;
          scalarFields["temperature"] = &temperature;
 
@@ -22,20 +23,44 @@ public:
     void step(const std::vector<const BoundaryCondition*>& scalar_bcs, const std::vector<const BoundaryCondition*>& vector_bcs) override 
     {
         // computing scalar derivatives
-        auto laplacianTemperature = Laplacian::compute(grid, temperature);
-        auto dTemperature_dt = D_temperature*laplacianTemperature;
+        auto dTemperature_dt = D_temperature*Laplacian::compute(grid, temperature);
 
         // computing vector derivatives
-        auto laplacianDirector = Laplacian::compute(grid, director);
-        auto sourceFieldDirector = source.compute(grid);
-        auto dDirector_dt = D_director * laplacianDirector + sourceFieldDirector; // this line does not work
+        auto dDirector_dt = D_director * Laplacian::compute(grid, director) + source.compute(grid); // this line does not work
 
         // updating fields
-        temperature = temperature + dt * dTemperature_dt;
-        scalar_bcs[0]->apply(temperature, grid);
+        //temperature = temperature + dt * dTemperature_dt;
+        //scalar_bcs[0]->apply(temperature, grid);
 
-        director = director + dt * dDirector_dt;   
-        vector_bcs[0]->apply(director, grid);
+        //director = director + dt * dDirector_dt;   
+        //vector_bcs[0]->apply(director, grid);
+
+        // ================== //
+        // below is a bit harder approach but it can work outside the class, so that in the step code, we can only define the equation to be solved
+
+        dScalarFields_dt["temperature"] = &dTemperature_dt;
+        dVectorFields_dt["director"] = &dDirector_dt;
+        
+        for (auto it = dScalarFields_dt.begin(); it != dScalarFields_dt.end(); it++) 
+        {
+            auto fieldName = it->first;
+            auto dField = it->second; // pointer to derivative
+            *(scalarFields[fieldName]) = *(scalarFields[fieldName]) + (*dField) * dt;
+
+            // the first argument of apply is the field that will be updated
+            scalar_bcs[0]->apply(*(scalarFields[fieldName]), grid);
+        }
+
+        for (auto it = dVectorFields_dt.begin(); it != dVectorFields_dt.end(); it++) 
+        {
+            auto fieldName = it->first;
+            auto dField = it->second; // pointer to derivative
+            *(vectorFields[fieldName]) = *(vectorFields[fieldName]) + (*dField) * dt;
+
+            vector_bcs[0]->apply(director, grid);
+        }
+        
+
     }
 
 private:
