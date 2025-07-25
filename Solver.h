@@ -13,26 +13,11 @@ public:
         monitoredVariablesVector={};
     }
 
-    void solve(int steps, const std::vector<const BoundaryCondition*>& bcs) {
+    void solve(int steps, const std::vector<const BoundaryCondition*>& scalar_bcs, const std::vector<const BoundaryCondition*>& vector_bcs) {
         for (int i = 0; i < steps; ++i) {
             std::cout << "Step: " << i << std::endl;
-            equation.step(bcs);  // one time step. function defined in Equation01 etc
-            
-            /*
-            // comment for now because we are using getResultScalar - not sure what to do with it
-            // monitoring variable evolution
-            for(VariableMonitor* var: monitoredVariablesVector){
-                int ix = var->getIx();
-                int iy = var->getIy();
-                var->update(getResultScalar(var->getName())[iy][ix]);
-            }
-            */
-
+            equation.step(scalar_bcs, vector_bcs);  // one time step. function defined in Equation01 etc
         }
-    }
-    
-    const std::vector<std::vector<double>> getResultScalar(std::string name) const {
-        return equation.getFieldScalar(name);
     }
     
     void addVariableMonitor(VariableMonitor& var){

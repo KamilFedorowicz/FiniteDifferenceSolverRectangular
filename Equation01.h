@@ -18,15 +18,18 @@ public:
     {
         // initial field set to 0 by default
         const std::vector<std::vector<double>> initField(grid.get_ny(), std::vector<double>(grid.get_nx(), 0));
-        initializeField(initField);
+        initialiseField(initField);
+
+        scalarFields["temperature"] = &temperature;
+        scalarFields["pressure"] = &pressure;
     }
 
-    void initializeField(const std::vector<std::vector<double>>& initialField) {
+    void initialiseField(const std::vector<std::vector<double>>& initialField) {
         temperature = initialField;
         pressure = initialField;
     }
     
-    void step(const std::vector<const BoundaryCondition*>& bcs) override {
+    void step(const std::vector<const BoundaryCondition*>& scalar_bcs, const std::vector<const BoundaryCondition*>& vector_bcs) override {
         auto laplacianTemp = Laplacian::compute(grid, temperature);
         auto laplacianPres = Laplacian::compute(grid, pressure);
         auto sourceFieldTemp = source.compute(grid);
@@ -39,24 +42,22 @@ public:
         pressure = pressure + dt * dPres_dt;
         
         
-        bcs[0]->apply(temperature, grid);
-        bcs[1]->apply(pressure, grid);
+        scalar_bcs[0]->apply(temperature, grid);
+        scalar_bcs[1]->apply(pressure, grid);
         
     }
     
     // we need this to keep the field public
-    const std::vector<std::vector<double>>& getFieldScalar(std::string name) const {
-        if(name==fieldName1){
-            return temperature;
-        } // add here more ifs if more field types
-        else if(name==fieldName2){
-            return pressure;
-        } else{
+    const std::vector<std::vector<double>>& getScalarField(std::string name) const 
+    {  
+        auto it = scalarFields.find(name);
+        if (it!=scalarFields.end()) {
+            return *(it->second); // dereference the pointer
+        }else{
             std::cout << "Incorrect name, returning zero field!" << std::endl;
             std::vector<std::vector<double>> zeroField(temperature.size(), std::vector<double>(temperature[0].size(), 0.0));
                 return zeroField;
         }
-        
     }
 
 private:
@@ -64,9 +65,8 @@ private:
     double D;
     double dt;
     std::vector<std::vector<double>> temperature;
-    std::string fieldName1 = "temperature";
     std::vector<std::vector<double>> pressure;
-    std::string fieldName2 = "pressure";
     const SourceTermScalar& source;
+
     
 };

@@ -19,7 +19,7 @@ void runCase1_Equation01(){
     SourceTermScalar source(1.0);
     Equation01 eq(grid, 0.1, 0.001, source); // arguments: grid, D, dt, source
     //std::vector<std::vector<double>> initialField(ny, std::vector<double>(nx, 0.0));
-    // eq.initializeField(initialField); // no need to initialise the field because this is done in the constructor
+    // eq.initialiseField(initialField); // no need to initialise the field because this is done in the constructor
     
     MyBoundaryCondition bc_temp;
     bc_temp.setNorthType(BCType::FixedValue);
@@ -47,7 +47,8 @@ void runCase1_Equation01(){
     std::vector<const BoundaryCondition*> bcs;
     bcs.push_back(&bc_temp);
     bcs.push_back(&bc_pres);
-    
+
+    std::vector<const BoundaryCondition*> bcs_dummy; // this is for vector boundary conditions. not relevant for this case
     
     // std::cout << "Working here" << std::endl;
     
@@ -61,19 +62,19 @@ void runCase1_Equation01(){
     solver.addVariableMonitor(monitor2);
     
     
-    solver.solve(1000, bcs);
+    solver.solve(10, bcs, bcs_dummy);
     
     
     // === Export result ===
     // on mac
     /*
-    CSVExporter::saveToCSVWithCoordinates(grid, solver.getResultScalar("temperature"), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/result.csv");
+    CSVExporter::saveToCSVWithCoordinates(grid, eq.getScalarField("temperature"), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/result.csv");
     CSVExporter::saveMonitoredVariable(monitor1.returnMonitoredVariable(), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/time_plot1.csv");
     CSVExporter::saveMonitoredVariable(monitor2.returnMonitoredVariable(), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/time_plot2.csv");
     */
 
     // on windows
-    CSVExporter::saveToCSVWithCoordinates(grid, solver.getResultScalar("temperature"), "C:/Users/kfedorowicz/source/repos/my_solver2/result.csv");
+    CSVExporter::saveToCSVWithCoordinates(grid, eq.getScalarField("temperature"), "C:/Users/kfedorowicz/source/repos/my_solver2/result.csv");
     CSVExporter::saveMonitoredVariable(monitor1.returnMonitoredVariable(), "C:/Users/kfedorowicz/source/repos/my_solver2/time_plot1.csv");
     CSVExporter::saveMonitoredVariable(monitor2.returnMonitoredVariable(), "C:/Users/kfedorowicz/source/repos/my_solver2/time_plot2.csv");
     

@@ -25,6 +25,29 @@ public:
 
         file.close();
     }
+
+    static void saveToCSVWithCoordinates(const Grid& grid,
+                                                const std::vector<std::vector<std::vector<double>>>& data,
+                                                const std::string& filename)
+{
+    std::ofstream file(filename);
+    if (!file.is_open()) {
+        throw std::runtime_error("Failed to open file: " + filename);
+    }
+
+    file << "x,y,u,v\n";
+
+    for (int i = 0; i < grid.get_ny(); ++i) {
+        for (int j = 0; j < grid.get_nx(); ++j) {
+            const auto& vec = data[i][j];
+            double u = vec.size() > 0 ? vec[0] : 0.0;
+            double v = vec.size() > 1 ? vec[1] : 0.0;
+            file << grid.get_x(j) << "," << grid.get_y(i) << "," << u << "," << v << "\n";
+        }
+    }
+
+    file.close();
+}
     
     static void saveMonitoredVariable(const std::vector<double>& monitoredData,
                                       const std::string& filename)
