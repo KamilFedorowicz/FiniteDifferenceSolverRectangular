@@ -29,7 +29,7 @@ public:
         // std::cout << "Working here" << std::endl;
 
 
-        auto dTemp_dt = D * laplacianTemp + sourceFieldTemp; // this line does not work        
+        auto dTemp_dt = D * laplacianTemp + sourceFieldTemp; // this line does not work
         auto dPres_dt = D * laplacianPres; // this line does not work
 
         /*
@@ -40,7 +40,7 @@ public:
         dScalarFields_dt["temperature"] = &dTemp_dt;
         dScalarFields_dt["pressure"] = &dPres_dt;
 
-        for (auto it = dScalarFields_dt.begin(); it != dScalarFields_dt.end(); it++) 
+        for (auto it = dScalarFields_dt.begin(); it != dScalarFields_dt.end(); it++)
         {
             auto fieldName = it->first;
             auto dField = it->second; // pointer to derivative

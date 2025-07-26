@@ -41,4 +41,3 @@ public:
 protected:
     std::vector<double> constantSourceVector;  // e.g., size 2: [Fx, Fy]
 };
-

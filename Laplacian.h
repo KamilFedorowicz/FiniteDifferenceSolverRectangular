@@ -6,7 +6,6 @@
 class Laplacian{
 public:
     
-    // LAPLACIAN OF A SCALAR FIELD
     static const std::vector<std::vector<double>> compute(const Grid& grid,
                                                           const std::vector<std::vector<double>>& field){
         std::vector<std::vector<double>> result(grid.get_ny(), std::vector<double>(grid.get_nx(), 0));
@@ -48,7 +47,6 @@ public:
         return result;
     }
     
-    // LAPLACIAN OF A VECTOR FIELD
     static std::vector<std::vector<std::vector<double>>> compute(
         const Grid& grid,
         const std::vector<std::vector<std::vector<double>>>& field)

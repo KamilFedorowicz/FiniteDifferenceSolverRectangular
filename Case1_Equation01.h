@@ -73,17 +73,18 @@ void runCase1_Equation01(){
     
     // === Export result ===
     // on mac
-    /*
+    
     CSVExporter::saveToCSVWithCoordinates(grid, eq.getScalarField("temperature"), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/result.csv");
     CSVExporter::saveMonitoredVariable(monitor1.returnMonitoredVariable(), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/time_plot1.csv");
     CSVExporter::saveMonitoredVariable(monitor2.returnMonitoredVariable(), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/time_plot2.csv");
-    */
-
+    
+    /*
     // on windows
     CSVExporter::saveToCSVWithCoordinates(grid, eq.getScalarField("temperature"), "C:/Users/kfedorowicz/source/repos/my_solver2/result.csv");
     CSVExporter::saveMonitoredVariable(monitor1.returnMonitoredVariable(), "C:/Users/kfedorowicz/source/repos/my_solver2/time_plot1.csv");
     CSVExporter::saveMonitoredVariable(monitor2.returnMonitoredVariable(), "C:/Users/kfedorowicz/source/repos/my_solver2/time_plot2.csv");
-    
+    */
+     
     std::cout << "Simulation completed. Output saved to result.csv\n";
     
 }

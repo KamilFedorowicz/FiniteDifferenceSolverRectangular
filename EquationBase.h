@@ -30,13 +30,13 @@ public:
         auto it = scalarFields.find(name);
 
         if (it != scalarFields.end()) {
-            if (field.size() != grid.get_ny() || field[0].size() != grid.get_nx()) 
+            if (field.size() != grid.get_ny() || field[0].size() != grid.get_nx())
             {
                 throw std::runtime_error("Scalar field size does not match grid dimensions.");
             }
             *(it->second) = field;
         }
-        else 
+        else
         {
             std::cout << "The name "<< name << " is not the right name of a scalar field!" << std::endl;
         }
@@ -44,30 +44,30 @@ public:
 
     void initialiseField(std::string name, const std::vector<std::vector<std::vector<double>>> field) {
         auto it = vectorFields.find(name);
-        if (it!=vectorFields.end()) 
+        if (it!=vectorFields.end())
         {
-            if (field.size() != grid.get_ny() || field[0].size() != grid.get_nx()) 
+            if (field.size() != grid.get_ny() || field[0].size() != grid.get_nx())
             {
                 throw std::runtime_error("Vector field size does not match grid dimensions.");
             }
             *(it->second) = field;
         }
-        else 
+        else
         {
             std::cout << "The name "<< name << " is not the right name of a vector field!" << std::endl;
         }
     }
 
     // CHECKS IF VARIABLES ARE INITIALISED
-    void checkIfAllVariablesAreInitialised() 
+    void checkIfAllVariablesAreInitialised()
     {
         checkIfScalarFieldsAreInitialised();
         checkIfVectorFieldsAreInitialsed();
     }
 
-    void checkIfScalarFieldsAreInitialised() 
+    void checkIfScalarFieldsAreInitialised()
     {
-        for (const auto& it : scalarFields) 
+        for (const auto& it : scalarFields)
         {
             const std::string& name = it.first;
             const auto* fieldPtr = it.second;
@@ -77,7 +77,7 @@ public:
             if (!fieldPtr) {
                 std::cout << "Field " << name << " is not initialised!" << std::endl;
                 throw std::runtime_error("Field not initialised!.");
-            } 
+            }
             else if (fieldPtr->empty() || (*fieldPtr)[0].empty()) {
                 std::cout << "Field " << name << " is empty!" << std::endl;
                throw std::runtime_error("Field is empty.");
@@ -85,9 +85,9 @@ public:
         }
     }
 
-    void checkIfVectorFieldsAreInitialsed() 
+    void checkIfVectorFieldsAreInitialsed()
     {
-        for (const auto& it : vectorFields) 
+        for (const auto& it : vectorFields)
         {
             const std::string& name = it.first;
             const auto* fieldPtr = it.second;
@@ -97,7 +97,7 @@ public:
             if (!fieldPtr) {
                 std::cout << "Field " << name << " is not initialised!" << std::endl;
                 throw std::runtime_error("Field not initialised!.");
-            } 
+            }
             else if (fieldPtr->empty() || (*fieldPtr)[0].empty()) {
                 std::cout << "Field " << name << " is empty!" << std::endl;
                throw std::runtime_error("Field is empty.");
@@ -108,8 +108,8 @@ public:
 
 
     // FUNCTIONS USED TO GET SCALAR AND VECTOR FIELDS
-    const std::vector<std::vector<double>>& getScalarField(std::string name) const 
-    {  
+    const std::vector<std::vector<double>>& getScalarField(std::string name) const
+    {
         auto it = scalarFields.find(name);
         if (it!=scalarFields.end()) {
             return *(it->second); // dereference the pointer
@@ -121,7 +121,7 @@ public:
     }
 
     const std::vector<std::vector<std::vector<double>>>& getVectorField(std::string name) const
-    {  
+    {
         auto it = vectorFields.find(name);
         if (it!=vectorFields.end()) {
             return *(it->second); // dereference the pointer
@@ -137,9 +137,9 @@ public:
         std::vector<std::vector<double>> result(grid.get_ny(), std::vector<double>(grid.get_nx(), 0));
 
         auto it = vectorFields.find(name);
-        if (it != vectorFields.end()) 
+        if (it != vectorFields.end())
         {
-            for (int i = 0; i < grid.get_ny(); i++) 
+            for (int i = 0; i < grid.get_ny(); i++)
             {
                 for (int j = 0; j < grid.get_nx(); j++)
                 {

@@ -79,7 +79,7 @@ inline std::vector<std::vector<std::vector<double>>> operator+(
 
     for (size_t i = 0; i < matrix1.size(); ++i) {
         for (size_t j = 0; j < matrix1[0].size(); ++j) {
-            for (size_t k = 0; k < matrix1[0][0].size(); k++) 
+            for (size_t k = 0; k < matrix1[0][0].size(); k++)
             {
                 result[i][j][k] += matrix2[i][j][k];
             }

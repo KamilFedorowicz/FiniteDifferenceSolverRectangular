@@ -11,7 +11,7 @@
 #include "VariableMonitor.h"
 
 void runCase1_Equation02() {
-	const int nx = 40;
+    const int nx = 40;
     const int ny = 50;
     Grid grid(0, 0, 1, 1, nx, ny);
 
@@ -51,10 +51,18 @@ void runCase1_Equation02() {
     scalar_bcs["temperature"] = &bc_temperature;
 
     Solver solver(eq, grid);
-    solver.solve(10, 0.001, scalar_bcs, vector_bcs);
+    solver.solve(1000, 0.001, scalar_bcs, vector_bcs);
 
+    CSVExporter::saveToCSVWithCoordinates(grid, eq.getVectorField("director"), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/directorField.csv");
+    CSVExporter::saveToCSVWithCoordinates(grid, eq.getVectorFieldMagnitude("director"), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/director_mag.csv");
+    CSVExporter::saveToCSVWithCoordinates(grid, eq.getScalarField("temperature"), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/temp_field.csv");
+
+    
+    /*
      CSVExporter::saveToCSVWithCoordinates(grid, eq.getVectorField("director"), "C:/Users/kfedorowicz/source/repos/my_solver2/director.csv");
      CSVExporter::saveToCSVWithCoordinates(grid, eq.getVectorFieldMagnitude("director"), "C:/Users/kfedorowicz/source/repos/my_solver2/director_mag.csv");
      CSVExporter::saveToCSVWithCoordinates(grid, eq.getScalarField("temperature"), "C:/Users/kfedorowicz/source/repos/my_solver2/temp_field.csv");
-
+     */
+     
+     
 }

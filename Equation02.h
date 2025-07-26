@@ -20,24 +20,22 @@ public:
 
     }
 
-    void step(std::map<std::string, const BoundaryCondition*>& scalar_bcs, std::map<std::string, const BoundaryCondition*>& vector_bcs) override 
+    void step(std::map<std::string, const BoundaryCondition*>& scalar_bcs, std::map<std::string, const BoundaryCondition*>& vector_bcs) override
     {
         // computing scalar derivatives
-        auto dTemperature_dt = D_temperature*Laplacian::compute(grid, temperature);
-
-        // computing vector derivatives
-        auto dDirector_dt = D_director * Laplacian::compute(grid, director) + source.compute(grid); // this line does not work
+        dTemperature_dt = D_temperature * Laplacian::compute(grid, temperature);
+        dDirector_dt = D_director * Laplacian::compute(grid, director) + source.compute(grid);
 
         dScalarFields_dt["temperature"] = &dTemperature_dt;
         dVectorFields_dt["director"] = &dDirector_dt;
         
-        updateFields(scalar_bcs, vector_bcs, dt);
-        
+        //updateFields(scalar_bcs, vector_bcs, dt);
     }
 
-    void updateFields(std::map<std::string, const BoundaryCondition*>& scalar_bcs, std::map<std::string, const BoundaryCondition*>& vector_bcs, double dt) 
+    /*
+    void updateFields(std::map<std::string, const BoundaryCondition*>& scalar_bcs, std::map<std::string, const BoundaryCondition*>& vector_bcs, double dt)
     {
-        for (auto it = dScalarFields_dt.begin(); it != dScalarFields_dt.end(); it++) 
+        for (auto it = dScalarFields_dt.begin(); it != dScalarFields_dt.end(); it++)
         {
             auto fieldName = it->first;
             auto dField = it->second; // pointer to derivative
@@ -47,7 +45,7 @@ public:
             scalar_bcs.at(fieldName)->apply(*(scalarFields[fieldName]), grid);
         }
 
-        for (auto it = dVectorFields_dt.begin(); it != dVectorFields_dt.end(); it++) 
+        for (auto it = dVectorFields_dt.begin(); it != dVectorFields_dt.end(); it++)
         {
             auto fieldName = it->first;
             auto dField = it->second; // pointer to derivative
@@ -56,6 +54,7 @@ public:
             vector_bcs.at(fieldName)->apply(*(vectorFields[fieldName]), grid);
         }
     }
+     */
 
 
 
@@ -65,11 +64,13 @@ private:
     double D_temperature;
     double dt;
     std::vector<std::vector<std::vector<double>>> director;
-    std::string directorName = "director";
+    std::vector<std::vector<std::vector<double>>> dDirector_dt;
 
     std::vector<std::vector<double>> temperature;
-    std::string temperatureName = "temperature";
+    std::vector<std::vector<double>> dTemperature_dt;
+
     const SourceTermVector& source;
+
 
 
 
