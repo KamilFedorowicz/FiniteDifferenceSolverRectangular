@@ -4,6 +4,7 @@
 #include "Grid.h"
 #include "VariableMonitor.h"
 #include <map>
+#include "FieldTypes.h"
 
 // take the solving process away from the equation
 
@@ -17,7 +18,7 @@ public:
         equation.checkIfAllVariablesAreInitialised();
         for (int i = 0; i < steps; ++i) {
             std::cout << "Step: " << i << std::endl;
-            equation.step(scalar_bcs, vector_bcs);  // one time step. function defined in Equation01 etc
+            equation.step(scalar_bcs, vector_bcs, dt);  // one time step. function defined in Equation01 etc
             updateFields(scalar_bcs, vector_bcs, dt);
             
         }

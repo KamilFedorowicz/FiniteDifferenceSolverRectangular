@@ -15,11 +15,16 @@ void runCase1_Equation02() {
     const int ny = 50;
     Grid grid(0, 0, 1, 1, nx, ny);
 
-    SourceTermVector source({ 0,0 });
-    Equation02 eq(grid, 0.1, 0.1, 0.001, source);
+    std::map<std::string, scalarSourceTerm> scalarSourceTerms;
+    std::map<std::string, vectorSourceTerm> vectorSourceTerms;
+    
+    scalarSourceTerms["temperature"] = scalarSourceTerm(0);
+    vectorSourceTerms["director"] = vectorSourceTerm({ 0,1 });
+    
+    Equation02 eq(grid, 0.1, 0.1, scalarSourceTerms, vectorSourceTerms); // arguments: grid, diff coeff for for director, diff coeff for temperature
 
-    std::vector<std::vector<double>> initialTemperatureField(ny, std::vector<double>(nx, 0.0));
-    std::vector<std::vector<std::vector<double>>> initialDirectorField(ny, std::vector<std::vector<double>>(nx, std::vector<double>{1,0}));
+    scalarField initialTemperatureField(ny, std::vector<double>(nx, 0.0));
+    vectorField initialDirectorField(ny, std::vector<std::vector<double>>(nx, std::vector<double>{1,0}));
     eq.initialiseField("temperature", initialTemperatureField);
     eq.initialiseField("director", initialDirectorField);
 
@@ -51,11 +56,11 @@ void runCase1_Equation02() {
     scalar_bcs["temperature"] = &bc_temperature;
 
     Solver solver(eq, grid);
-    solver.solve(1000, 0.001, scalar_bcs, vector_bcs);
+    solver.solve(1000, 0.001, scalar_bcs, vector_bcs); // arguments: steps, dt, BCs
 
-    CSVExporter::saveToCSVWithCoordinates(grid, eq.getVectorField("director"), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/directorField.csv");
-    CSVExporter::saveToCSVWithCoordinates(grid, eq.getVectorFieldMagnitude("director"), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/director_mag.csv");
-    CSVExporter::saveToCSVWithCoordinates(grid, eq.getScalarField("temperature"), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/temp_field.csv");
+    CSVExporter::saveToCSVWithCoordinates(grid, eq.getVectorField("director"), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/CSV_files/directorField.csv");
+    CSVExporter::saveToCSVWithCoordinates(grid, eq.getVectorFieldMagnitude("director"), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/CSV_files/director_mag.csv");
+    CSVExporter::saveToCSVWithCoordinates(grid, eq.getScalarField("temperature"), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/CSV_files/temp_field.csv");
 
     
     /*

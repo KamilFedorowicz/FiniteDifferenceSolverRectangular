@@ -2,19 +2,20 @@
 #include "BoundaryCondition.h"
 #include "Grid.h"
 #include <vector>
+#include "FieldTypes.h"
 
 class MyBoundaryCondition : public BoundaryCondition {
 public:
     MyBoundaryCondition() = default;
 
     // === Apply wall and obstacle BCs for a scalar field
-    void apply(std::vector<std::vector<double>>& field, const Grid& grid) const {
+    void apply(scalarField& field, const Grid& grid) const {
         applyWallBCs(field, grid);
         applyObstacles(field, grid);
     }
     
     // === Apply wall and obstacle BCs for a vector field
-    void apply(std::vector<std::vector<std::vector<double>>>& field, const Grid& grid) const {
+    void apply(vectorField& field, const Grid& grid) const {
         applyWallBCs(field, grid);
     }
 
@@ -69,7 +70,7 @@ private:
 
 
     // === Apply wall BCs for a scalar field
-    void applyWallBCs(std::vector<std::vector<double>>& field, const Grid& grid) const {
+    void applyWallBCs(scalarField& field, const Grid& grid) const {
         int nx = grid.get_nx();
         int ny = grid.get_ny();
 
@@ -88,7 +89,7 @@ private:
     }
     
     // === Apply wall BCs for a vector field
-    void applyWallBCs(std::vector<std::vector<std::vector<double>>>& field, const Grid& grid) const {
+    void applyWallBCs(vectorField& field, const Grid& grid) const {
         int nx = grid.get_nx();
         int ny = grid.get_ny();
 
@@ -113,7 +114,7 @@ private:
 
     
     // === Apply obstacle BCs for a scalar field
-    void applyObstacles(std::vector<std::vector<double>>& field, const Grid& grid) const {
+    void applyObstacles(scalarField& field, const Grid& grid) const {
         for(int obs_count=0; obs_count<valueObsScalar.size(); obs_count++){
             double x_o_east = xObsEast[obs_count];
             double x_o_west = xObsWest[obs_count];
@@ -135,7 +136,7 @@ private:
     }
     
     // === Apply obstacle BCs for a vector field
-    void applyObstacles(std::vector<std::vector<std::vector<double>>>& field, const Grid& grid) const {
+    void applyObstacles(vectorField& field, const Grid& grid) const {
         for(int obs_count=0; obs_count<valueObsScalar.size(); obs_count++){
             double x_o_east = xObsEast[obs_count];
             double x_o_west = xObsWest[obs_count];

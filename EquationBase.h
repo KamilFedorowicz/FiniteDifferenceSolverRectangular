@@ -5,6 +5,7 @@
 #include <variant>
 #include <map>
 #include <cassert>
+#include "FieldTypes.h"
 
 
 
@@ -15,18 +16,18 @@ public:
     EquationBase(Grid& grid_) : grid(grid_) {};
     virtual ~EquationBase() = default;
 
-    virtual void step(std::map<std::string, const BoundaryCondition*>& scalar_bcs, std::map<std::string, const BoundaryCondition*>& vector_bcs) =0;
-    virtual void solve(int steps, std::map<std::string, const BoundaryCondition*>& scalar_bcs, std::map<std::string, const BoundaryCondition*>& vector_bcs) {
+    virtual void step(std::map<std::string, const BoundaryCondition*>& scalar_bcs, std::map<std::string, const BoundaryCondition*>& vector_bcs, double dt) =0;
+    virtual void solve(int steps, std::map<std::string, const BoundaryCondition*>& scalar_bcs, std::map<std::string, const BoundaryCondition*>& vector_bcs, double dt) {
 
         for (int i = 0; i < steps; ++i) {
-            step(scalar_bcs, vector_bcs);
+            step(scalar_bcs, vector_bcs, dt);
         }
     }
     
     // INITIALISATION FUNCTIONS
 
     // we provide two arguments: name of the field and the values assigned to the vector field
-    void initialiseField(std::string name, const std::vector<std::vector<double>> field) {
+    void initialiseField(std::string name, const scalarField field) {
         auto it = scalarFields.find(name);
 
         if (it != scalarFields.end()) {
@@ -42,7 +43,7 @@ public:
         }
     }
 
-    void initialiseField(std::string name, const std::vector<std::vector<std::vector<double>>> field) {
+    void initialiseField(std::string name, const vectorField field) {
         auto it = vectorFields.find(name);
         if (it!=vectorFields.end())
         {
@@ -115,7 +116,7 @@ public:
             return *(it->second); // dereference the pointer
         }else{
             std::cout << "Incorrect name, returning zero field!" << std::endl;
-            std::vector<std::vector<double>> zeroField(grid.get_ny(), std::vector<double>(grid.get_nx(), 0.0));
+            scalarField zeroField(grid.get_ny(), std::vector<double>(grid.get_nx(), 0.0));
                 return zeroField;
         }
     }
@@ -127,14 +128,14 @@ public:
             return *(it->second); // dereference the pointer
         }else{
             std::cout << "Incorrect name, returning zero field!" << std::endl;
-            std::vector<std::vector<std::vector<double>>> zeroField(grid.get_ny(), std::vector<std::vector<double>>(grid.get_nx(), std::vector<double>(0)));
+            vectorField zeroField(grid.get_ny(), std::vector<std::vector<double>>(grid.get_nx(), std::vector<double>(0)));
                 return zeroField;
         }
     }
 
-    const std::vector<std::vector<double>> getVectorFieldMagnitude(std::string name) const
+    const scalarField getVectorFieldMagnitude(std::string name) const
     {
-        std::vector<std::vector<double>> result(grid.get_ny(), std::vector<double>(grid.get_nx(), 0));
+        scalarField result(grid.get_ny(), std::vector<double>(grid.get_nx(), 0));
 
         auto it = vectorFields.find(name);
         if (it != vectorFields.end())
@@ -157,11 +158,14 @@ public:
         return result;
     }
 
-    std::map< std::string, std::vector<std::vector<double>>* > scalarFields; // the second variable is a reference to the field
-    std::map< std::string, std::vector<std::vector<std::vector<double>>>* > vectorFields; // the second variable is a reference to the field
+    scalarFieldMap scalarFields; // the second variable is a reference to the field
+    vectorFieldMap vectorFields; // the second variable is a reference to the field
 
-    std::map< std::string, std::vector<std::vector<double>>* > dScalarFields_dt; // the second variable is a reference to the field
-    std::map< std::string, std::vector<std::vector<std::vector<double>>>* > dVectorFields_dt; // the second variable is a reference to the field
+    scalarFieldMap dScalarFields_dt; // rate of change in time of a scalar field is also of the type scalarField
+    vectorFieldMap dVectorFields_dt; // the second variable is a reference to the field
+    
+    scalarFieldMap scalarSourceTerms;
+    vectorFieldMap vectorSourceTerms;
 
 private:
     Grid& grid;

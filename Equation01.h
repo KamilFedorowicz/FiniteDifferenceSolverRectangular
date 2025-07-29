@@ -13,53 +13,34 @@
 
 class Equation01 : public EquationBase {
 public:
-    Equation01(Grid& grid, double diffusionCoeff, double dt, const SourceTermScalar& source)
-        : grid(grid), D(diffusionCoeff), dt(dt), source(source), EquationBase(grid)
+    Equation01(Grid& grid, double diffusionCoeff, const std::map<std::string, scalarSourceTerm>& scalarSourceTerms_, const std::map<std::string, vectorSourceTerm>& vectorSourceTerms_)
+        : grid(grid), D(diffusionCoeff), EquationBase(grid), scalarSourceTerms(scalarSourceTerms_), vectorSourceTerms(vectorSourceTerms_)
     {
         scalarFields["temperature"] = &temperature;
         scalarFields["pressure"] = &pressure;
     }
-
-
     
-    void step(std::map<std::string, const BoundaryCondition*>& scalar_bcs, std::map<std::string, const BoundaryCondition*>& vector_bcs) override {
-        auto laplacianTemp = Laplacian::compute(grid, temperature);
-        auto laplacianPres = Laplacian::compute(grid, pressure);
-        auto sourceFieldTemp = source.compute(grid);
-        // std::cout << "Working here" << std::endl;
+    void step(std::map<std::string, const BoundaryCondition*>& scalar_bcs, std::map<std::string, const BoundaryCondition*>& vector_bcs, double dt) override
+    {
+        dTemperature_dt = D * Laplacian::compute(grid, temperature) + Laplacian::compute(grid, temperature) + scalarSourceTerms.at("temperature").compute(grid);
+        dPressure_dt = D * Laplacian::compute(grid, pressure) ;
 
-
-        auto dTemp_dt = D * laplacianTemp + sourceFieldTemp; // this line does not work
-        auto dPres_dt = D * laplacianPres; // this line does not work
-
-        /*
-        temperature = temperature + dt * dTemp_dt;
-        pressure = pressure + dt * dPres_dt;
-        */
-
-        dScalarFields_dt["temperature"] = &dTemp_dt;
-        dScalarFields_dt["pressure"] = &dPres_dt;
-
-        for (auto it = dScalarFields_dt.begin(); it != dScalarFields_dt.end(); it++)
-        {
-            auto fieldName = it->first;
-            auto dField = it->second; // pointer to derivative
-            *(scalarFields[fieldName]) = *(scalarFields[fieldName]) + (*dField) * dt;
-
-            // the first argument of apply is the field that will be updated
-            scalar_bcs.at(fieldName)->apply(*(scalarFields[fieldName]), grid);
-        }
         
+        dScalarFields_dt["temperature"] = &dTemperature_dt;
+        dScalarFields_dt["pressure"] = &dPressure_dt;
     }
-    
 
 private:
     Grid& grid;
     double D;
-    double dt;
-    std::vector<std::vector<double>> temperature;
-    std::vector<std::vector<double>> pressure;
-    const SourceTermScalar& source;
+    scalarField temperature;
+    scalarField pressure;
+    
+    scalarField dTemperature_dt;
+    scalarField dPressure_dt;
+    
+    const std::map<std::string, scalarSourceTerm>& scalarSourceTerms;
+    const std::map<std::string, vectorSourceTerm>& vectorSourceTerms;
 
     
 };

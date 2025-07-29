@@ -11,15 +11,19 @@
 #include "MathOperators.h"
 #include "VariableMonitor.h"
 #include <map>
+#include "FieldTypes.h"
 
 void runCase1_Equation01(){
     int nx = 40;
     int ny = 50;
     Grid grid(0, 0, 1, 1, nx, ny);
     
-    SourceTermScalar source(1.0);
-    Equation01 eq(grid, 0.1, 0.001, source); // arguments: grid, D, dt, source
-    std::vector<std::vector<double>> initialField(ny, std::vector<double>(nx, 0.0));
+    std::map<std::string, scalarSourceTerm> scalarSourceTerms;
+    std::map<std::string, vectorSourceTerm> vectorSourceTerms;
+    
+    scalarSourceTerms["temperature"] = scalarSourceTerm(0);
+    Equation01 eq(grid, 0.1, scalarSourceTerms, vectorSourceTerms); // arguments: grid, D, source
+    scalarField initialField(ny, std::vector<double>(nx, 0.0));
     
     eq.initialiseField("temperature", initialField);
     eq.initialiseField("pressure", initialField);
@@ -68,15 +72,15 @@ void runCase1_Equation01(){
     solver.addVariableMonitor(monitor2);
     
     
-    solver.solve(100, 0.001, scalar_bcs, vector_bcs);
+    solver.solve(100, 0.0001, scalar_bcs, vector_bcs);
     
     
     // === Export result ===
     // on mac
     
-    CSVExporter::saveToCSVWithCoordinates(grid, eq.getScalarField("temperature"), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/result.csv");
-    CSVExporter::saveMonitoredVariable(monitor1.returnMonitoredVariable(), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/time_plot1.csv");
-    CSVExporter::saveMonitoredVariable(monitor2.returnMonitoredVariable(), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/time_plot2.csv");
+    CSVExporter::saveToCSVWithCoordinates(grid, eq.getScalarField("temperature"), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/CSV_files/result.csv");
+    //CSVExporter::saveMonitoredVariable(monitor1.returnMonitoredVariable(), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/CSV_files/time_plot1.csv");
+    //CSVExporter::saveMonitoredVariable(monitor2.returnMonitoredVariable(), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/CSV_files/time_plot2.csv");
     
     /*
     // on windows

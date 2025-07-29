@@ -1,19 +1,20 @@
 #pragma once
 #include <vector>
 #include "Grid.h"
+#include "FieldTypes.h"
 
-class SourceTermScalar {
+class scalarSourceTerm {
 public:
     // Default: constant source of 0
-    SourceTermScalar() : constantSourceScalar(0.0) {}
+    scalarSourceTerm() : constantSourceScalar(0.0) {}
 
     // Custom constant value
-    SourceTermScalar(double value) : constantSourceScalar(value) {}
+    scalarSourceTerm(double value) : constantSourceScalar(value) {}
 
 
     // Override this method to define a spatially varying source
-    virtual std::vector<std::vector<double>> compute(const Grid& grid) const {
-        std::vector<std::vector<double>> source(grid.get_ny(), std::vector<double>(grid.get_nx(), constantSourceScalar));
+    virtual scalarField compute(const Grid& grid) const {
+        scalarField source(grid.get_ny(), std::vector<double>(grid.get_nx(), constantSourceScalar));
         return source;
     }
 
@@ -22,13 +23,13 @@ protected:
 };
 
 // applies to 2D vectors
-class SourceTermVector {
+class vectorSourceTerm {
 public:
     // Default: zero vector source
-    SourceTermVector() : constantSourceVector({0.0, 0.0}) {}
+    vectorSourceTerm() : constantSourceVector({0.0, 0.0}) {}
 
     // Custom constant value (e.g., {1.0, 0.0})
-    SourceTermVector(const std::vector<double>& value) : constantSourceVector(value) {}
+    vectorSourceTerm(const std::vector<double>& value) : constantSourceVector(value) {}
 
     // Returns a vector-valued source field (3D structure)
     virtual std::vector<std::vector<std::vector<double>>> compute(const Grid& grid) const {
