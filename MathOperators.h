@@ -106,7 +106,24 @@ inline vectorField operator/(const vectorField& vectField, double scalar)
     return result;
 }
 
+scalarField getVectorComponent(vectorField field, int n)
+{
+    scalarField result(field.size(), std::vector<double>(field[0].size(), 0.0));
+    if(n<0 || n>1){
+        std::cout << "Index out of bands!" << std::endl;
+        return result;
+    }
 
+    for (size_t i = 0; i < field.size(); ++i)
+    {
+        for (size_t j = 0; j < field[0].size(); ++j)
+        {
+            result[i][j] = field[i][j][n];
+        }
+    }
+    
+    return result;
+}
 
 scalarField magn(const vectorField& field)
 {

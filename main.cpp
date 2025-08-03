@@ -40,6 +40,8 @@ int main() {
     // tracking variables in time
     // source files in txt files like in openfoam - that would substitute Case1_Equation01 etc
     // how to make it compile etc?
+    // get vector component
+    // variable monitor for a vector field
     
     vectorField vect1(1, std::vector<std::vector<double>>(1, std::vector<double>{1,2}));
     vectorField vect2(1, std::vector<std::vector<double>>(1, std::vector<double>{2,3}));

@@ -68,8 +68,8 @@ void runCase1_Equation01(){
     
     Solver solver(eq, grid);
     
-    solver.addVariableMonitor(monitor1);
-    solver.addVariableMonitor(monitor2);
+    solver.addScalarVariableMonitor(monitor1);
+    solver.addScalarVariableMonitor(monitor2);
     
     
     solver.solve(100, 0.0001, scalar_bcs, vector_bcs);

@@ -54,13 +54,19 @@ void runCase1_Equation02() {
 
     std::map<std::string, const BoundaryCondition*> scalar_bcs;
     scalar_bcs["temperature"] = &bc_temperature;
-
+    
     Solver solver(eq, grid);
-    solver.solve(1000, 0.001, scalar_bcs, vector_bcs); // arguments: steps, dt, BCs
+    VariableMonitor monitor1(grid, 0.5, 0.4, "temperature2");
+    solver.addScalarVariableMonitor(monitor1);
+    
+    solver.solve(50, 0.001, scalar_bcs, vector_bcs); // arguments: steps, dt, BCs
+    
+    std::vector<double> monitorResult = monitor1.returnMonitoredScalarVariable();
 
     CSVExporter::saveToCSVWithCoordinates(grid, eq.getVectorField("director"), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/CSV_files/directorField.csv");
     CSVExporter::saveToCSVWithCoordinates(grid, eq.getVectorFieldMagnitude("director"), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/CSV_files/director_mag.csv");
     CSVExporter::saveToCSVWithCoordinates(grid, eq.getScalarField("temperature"), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/CSV_files/temp_field.csv");
+    CSVExporter::saveMonitoredVariable(monitorResult, "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/CSV_files/temp_monitor.csv");
 
     
     /*

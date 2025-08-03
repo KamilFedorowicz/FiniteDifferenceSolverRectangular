@@ -11,30 +11,46 @@ public:
     }
     ~VariableMonitor() = default;
     
-    void update(double value){
-        monitoredVariable.push_back(value);
+    void updateMonitoredScalarVariable(double value)
+    {
+        monitoredScalarVariable.push_back(value);
     }
     
-    std::vector<double> returnMonitoredVariable(){
-        return monitoredVariable;
+    void updateMonitoredVectorVariable(std::vector<double> value)
+    {
+        monitoredVectorVariable.push_back(value);
     }
     
-    void print(){
+    std::vector<double> returnMonitoredScalarVariable()
+    {
+        return monitoredScalarVariable;
+    }
+    
+    std::vector<std::vector<double>> returnMonitoredVectorVariable()
+    {
+        return monitoredVectorVariable;
+    }
+    
+    void print()
+    {
         std::cout  << "Monitored variable: " << std::endl;
-        for(double x: monitoredVariable){
+        for(double x: monitoredScalarVariable){
             std::cout << x << " " ;
         }
         std::cout << std::endl;
     }
     
-    int getIx(){
+    int getIx()
+    {
         return ix;
     }
-    int getIy(){
+    int getIy()
+    {
         return iy;
     }
     
-    std::string getName(){
+    std::string getName()
+    {
         return varName;
     }
     
@@ -44,7 +60,8 @@ private:
     double monitor_y = 0;
     Grid& grid;
     int ix, iy; // integers that store the number of monitored cell
-    std::vector<double> monitoredVariable{};
+    std::vector<double> monitoredScalarVariable{};
+    std::vector<std::vector<double>> monitoredVectorVariable{};
     std::string varName;
     
 };
