@@ -66,5 +66,22 @@ public:
         file.close();
     }
     
+    static void saveMonitoredVariable(const std::vector<std::vector<double>>& field,
+                          const std::string& filename)
+    {
+        std::ofstream file(filename);
+        if (!file.is_open()) {
+            throw std::runtime_error("Failed to open file: " + filename);
+        }
+
+        // Optional header
+        file << "row,col,value\n";
+
+        for (size_t i = 0; i < field.size(); ++i) {
+            file << i << ", " << field[i][0] << ", " << field[i][1] << "\n";
+        }
+
+        file.close();
+    }
     
 };

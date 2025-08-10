@@ -37,27 +37,14 @@ void print(const tensorField& field) {
 
 int main() {
 
-    // tracking variables in time
     // source files in txt files like in openfoam - that would substitute Case1_Equation01 etc
     // how to make it compile etc?
-    // get vector component
-    // variable monitor for a vector field
+
+
     
-    vectorField vect1(1, std::vector<std::vector<double>>(1, std::vector<double>{1,2}));
-    vectorField vect2(1, std::vector<std::vector<double>>(1, std::vector<double>{2,3}));
+
     
-    
-    std::vector<std::vector<std::vector<std::vector<double>>>> tens1(1, std::vector<std::vector<std::vector<double>>>(1, std::vector<std::vector<double>>{
-                                                                                                                                  {1.0, 3.0},
-                                                                                                                                  {2.0, 4.0}
-                                                                                                                              }
-                                                                                                                          )); // the inner tensor goes row by row
-    
-    
-    vectorField test = vect1/magn(vect1);
-    print(test);
-    
-    //runCase1_Equation01();
+    runCase1_Equation01();
 
     runCase1_Equation02();
 

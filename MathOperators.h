@@ -2,6 +2,8 @@
 #include <vector>
 #include <stdexcept>
 #include "FieldTypes.h"
+#include <iostream>
+#include <algorithm>
 #include <cmath>
 
 // Multiply scalar * 2D vector
@@ -125,6 +127,14 @@ scalarField getVectorComponent(vectorField field, int n)
     return result;
 }
 
+std::vector<double> getVectorComponent(const std::vector<std::vector<double>>& vectField, int n){
+    std::vector<double> result(vectField.size(), 0);
+    for(int i=0; i<vectField.size(); i++){
+        result[i] = vectField[i][n];
+    }
+    return result;
+}
+
 scalarField magn(const vectorField& field)
 {
     scalarField result(field.size(), std::vector<double>(field[0].size(), 0.0));
@@ -139,6 +149,39 @@ scalarField magn(const vectorField& field)
     
     return result;
 }
+
+double computeRootMeanSquaredValueOfVectorField(const vectorField& vectField){
+    double sumSquares = 0.0;
+    const scalarField vectorFieldMagnitude = magn(vectField);
+
+    const size_t ny = vectorFieldMagnitude.size();
+    const size_t nx = vectorFieldMagnitude[0].size();
+
+    for (size_t i = 0; i < ny; ++i) {
+        for (size_t j = 0; j < nx; ++j) {
+            sumSquares += std::pow(vectorFieldMagnitude[i][j], 2);
+        }
+    }
+
+    return std::sqrt(sumSquares / static_cast<double>(ny * nx));
+}
+
+double computeRootMeanSquaredValueOfScalarField(const scalarField& scalField){
+    double sumSquares = 0.0;
+
+    const size_t ny = scalField.size();
+    const size_t nx = scalField[0].size();
+
+    for (size_t i = 0; i < ny; ++i) {
+        for (size_t j = 0; j < nx; ++j) {
+            sumSquares += std::pow(scalField[i][j], 2);
+        }
+    }
+
+    return std::sqrt(sumSquares / static_cast<double>(ny * nx));
+}
+
+
 
 // applicable to 2x2 tensors and vectors of 2 elements
 inline vectorField operator*(const tensorField& tens, const vectorField& vect) {

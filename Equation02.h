@@ -24,12 +24,14 @@ public:
     {
         // computing scalar derivatives
         dTemperature_dt = D_temperature * Laplacian::compute(grid, temperature) + scalarSourceTerms.at("temperature").compute(grid);
-        dDirector_dt = D_director * Laplacian::compute(grid, director) - (director&director)*Laplacian::compute(grid, director) ;
+        dDirector_dt = D_director * Laplacian::compute(grid, director) - (director&director)*Laplacian::compute(grid, director)*0 ;
 
+        /*
         // the following lines normalise director magnitude
         vectorField directorNew = director + dDirector_dt*dt;
         directorNew = directorNew/magn(directorNew);
         dDirector_dt = (directorNew - director)/dt;
+         */
         
         dScalarFields_dt["temperature"] = &dTemperature_dt;
         dVectorFields_dt["director"] = &dDirector_dt;

@@ -34,19 +34,31 @@ public:
         {
             auto fieldName = it->first;
             auto dField = it->second; // pointer to derivative
+            
+            scalarField oldField = *(equation.scalarFields[fieldName]);
             *(equation.scalarFields[fieldName]) = *(equation.scalarFields[fieldName]) + (*dField) * dt;
 
             // the first argument of apply is the field that will be updated
             scalar_bcs.at(fieldName)->apply(*(equation.scalarFields[fieldName]), grid);
+            scalarField newField = *(equation.scalarFields[fieldName]);
+            
+            double error = computeRootMeanSquaredValueOfScalarField(newField - oldField); // calculate the error
+            std::cout<< "Scalar field: " << fieldName << ", error: " << error << std::endl;
         }
 
         for (auto it = equation.dVectorFields_dt.begin(); it != equation.dVectorFields_dt.end(); it++)
         {
             auto fieldName = it->first;
             auto dField = it->second; // pointer to derivative
-            *(equation.vectorFields[fieldName]) = *(equation.vectorFields[fieldName]) + (*dField) * dt;
-
+            
+            vectorField oldField = *(equation.vectorFields[fieldName]); // get the old field
+            *(equation.vectorFields[fieldName]) = *(equation.vectorFields[fieldName]) + (*dField) * dt; // calculate the new field
+            vectorField newField = *(equation.vectorFields[fieldName]); // value of the new field
+            
             vector_bcs.at(fieldName)->apply(*(equation.vectorFields[fieldName]), grid);
+            
+            double error = computeRootMeanSquaredValueOfVectorField(newField - oldField); // calculate the error
+            std::cout<< "Vector field: " << fieldName << ", error: " << error << std::endl;
         }
     }
     
@@ -69,6 +81,19 @@ public:
             {
                 const scalarField tempField = equation.getScalarField(tempName);
                 var->updateMonitoredScalarVariable(tempField[var->getIx()][var->getIy()]);
+            }else
+            {
+                std::cout << tempName << " string was not found in the variable map keys." << std::endl;
+            }
+        }
+        
+        for(VariableMonitor* var: vectorOfMonitoredVectorVariables)
+        {
+            const std::string tempName = var->getName();
+            if(equation.vectorFields.find(tempName) != equation.vectorFields.end())
+            {
+                const vectorField tempField = equation.getVectorField(tempName);
+                var->updateMonitoredVectorVariable(tempField[var->getIx()][var->getIy()]);
             }else
             {
                 std::cout << tempName << " string was not found in the variable map keys." << std::endl;
