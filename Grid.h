@@ -11,12 +11,23 @@ public:
     
     double get_x(int i) const {
         assert(i>=0 && i<=nx);
-        return x[i];
+        if (nx > 1) {
+            return x[i];
+        }
+        else {
+            return (start_x+end_x)/2;
+        }
     }
     
     double get_y(int i) const {
         assert(i>=0 && i<=ny);
-        return y[i];
+        if (ny > 1) {
+            return y[i];
+        }
+        else {
+            return (start_y+end_y)/2;
+        }
+        
     }
     
     const double get_x_lim(int i) const {

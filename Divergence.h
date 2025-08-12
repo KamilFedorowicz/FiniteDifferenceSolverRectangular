@@ -4,17 +4,14 @@
 #include "Grid.h"
 #include "FieldTypes.h"
 
-class Gradient{
+class Divergence{
 public:
     
-    static vectorField compute(
+    static scalarField compute(
         const Grid& grid,
-        const scalarField& scalField)
+        const vectorField& vectField)
     {
-        vectorField result(
-            grid.get_ny(),
-            std::vector<std::vector<double>>(grid.get_nx(), std::vector<double>(2, 0.0))
-        );
+        scalarField result(grid.get_ny(), std::vector<double>(grid.get_nx(), 0));
 
         double dx = (grid.get_nx() > 1) ? (grid.get_x(1) - grid.get_x(0)) : 1.0;
         double dy = (grid.get_ny() > 1) ? (grid.get_y(1) - grid.get_y(0)) : 1.0;
@@ -29,15 +26,15 @@ public:
                 if (grid.get_nx() > 1) {
                     if (j == 0) {
                         // forward difference
-                        d_dx = (scalField[i][j + 1] - scalField[i][j]) / dx;
+                        d_dx = (vectField[i][j + 1][0] - vectField[i][j][0]) / dx;
                     }
                     else if (j == grid.get_nx() - 1) {
                         // backward difference
-                        d_dx = (scalField[i][j] - scalField[i][j - 1]) / dx;
+                        d_dx = (vectField[i][j][0] - vectField[i][j - 1][0]) / dx;
                     }
                     else {
                         // central difference
-                        d_dx = (scalField[i][j + 1] - scalField[i][j - 1]) / (2.0 * dx);
+                        d_dx = (vectField[i][j + 1][0] - vectField[i][j - 1][0]) / (2.0 * dx);
                     }
                 }
 
@@ -45,44 +42,29 @@ public:
                 if (grid.get_ny() > 1) {
                     if (i == 0) {
                         // forward difference
-                        d_dy = (scalField[i + 1][j] - scalField[i][j]) / dy;
+                        d_dy = (vectField[i + 1][j][1] - vectField[i][j][1]) / dy;
                     }
                     else if (i == grid.get_ny() - 1) {
                         // backward difference
-                        d_dy = (scalField[i][j] - scalField[i - 1][j]) / dy;
+                        d_dy = (vectField[i][j][1] - vectField[i - 1][j][1]) / dy;
                     }
                     else {
                         // central difference
-                        d_dy = (scalField[i + 1][j] - scalField[i - 1][j]) / (2.0 * dy);
+                        d_dy = (vectField[i + 1][j][1] - vectField[i - 1][j][1]) / (2.0 * dy);
                     }
                 }
 
-                result[i][j][0] = d_dx;
-                result[i][j][1] = d_dy;
+                result[i][j] = d_dx + d_dy;
             }
         }
 
         return result;
     }
 
-
-    
-    static scalarField return_nth_elem(const Grid& grid,
-                                                            const std::vector<std::vector<std::vector<double>>>& field,
-                                                            int n) {
-        scalarField result(grid.get_ny(), std::vector<double>(grid.get_nx(), 0.0));
-        for (int i = 0; i < field.size(); ++i) {
-            for (int j = 0; j < field[0].size(); ++j) {
-                result[i][j] = field[i][j][n];
-            }
-        }
-        return result;
-    }
     
     
 private:
     
-//    std::shared_ptr<Grid> grid;
     
     
 };

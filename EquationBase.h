@@ -115,7 +115,7 @@ public:
         if (it!=scalarFields.end()) {
             return *(it->second); // dereference the pointer
         }else{
-            std::cout << "Incorrect name, returning zero field!" << std::endl;
+            std::cout << "Incorrect name " <<  name << ", returning zero field!" << std::endl;
             scalarField zeroField(grid.get_ny(), std::vector<double>(grid.get_nx(), 0.0));
                 return zeroField;
         }

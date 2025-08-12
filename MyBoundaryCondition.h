@@ -30,6 +30,11 @@ public:
     void setWestValue(double val) { west_value_scalar = val; }
     void setNorthValue(double val) { north_value_scalar = val; }
     void setSouthValue(double val) { south_value_scalar = val; }
+
+    void setEastGradient(double val) { east_gradient_scalar = val; }
+    void setWestGradient(double val) { west_gradient_scalar = val; }
+    void setNorthGradient(double val) { north_gradient_scalar = val; }
+    void setSouthGradient(double val) { south_gradient_scalar = val; }
     
     // === Obstacle BC setters for scalars===
     void setObstacle(double x_west, double y_south, double x_east, double y_north, double val){
@@ -61,6 +66,7 @@ private:
     
     // === Wall BC parameters ===
     double east_value_scalar = 0.0, west_value_scalar = 0.0, north_value_scalar = 0.0, south_value_scalar = 0.0;
+    double east_gradient_scalar = 0, west_gradient_scalar = 0, north_gradient_scalar = 0, south_gradient_scalar = 0;
     std::vector<double> east_value_vector = {}, west_value_vector = {}, north_value_vector = {}, south_value_vector = {};
 
     BCType eastType = BCType::FixedValue;
@@ -70,23 +76,70 @@ private:
 
 
     // === Apply wall BCs for a scalar field
-    void applyWallBCs(scalarField& field, const Grid& grid) const {
-        int nx = grid.get_nx();
-        int ny = grid.get_ny();
+void applyWallBCs(scalarField& field, const Grid& grid) const {
+    int nx = grid.get_nx();
+    int ny = grid.get_ny();
 
+    double dx = (nx > 1) ? (grid.get_x(1) - grid.get_x(0)) : 1.0;
+    double dy = (ny > 1) ? (grid.get_y(1) - grid.get_y(0)) : 1.0;
+
+    if (nx > 1) {
         // WEST
-        for (int i = 0; i < ny; ++i)
-            field[i][0] = (westType == BCType::FixedValue) ? west_value_scalar : field[i][1];
+        for (int i = 0; i < ny; ++i) {
+            if (westType == BCType::FixedValue) {
+                field[i][0] = west_value_scalar;
+            }
+            else if (westType == BCType::FixedGradient) {
+                field[i][0] = field[i][1] - west_gradient_scalar * dx; 
+                // minus because west is decreasing x
+            }
+            else { // ZeroGradient
+                field[i][0] = field[i][1];
+            }
+        }
         // EAST
-        for (int i = 0; i < ny; ++i)
-            field[i][nx - 1] = (eastType == BCType::FixedValue) ? east_value_scalar : field[i][nx - 2];
-        // SOUTH
-        for (int j = 0; j < nx; ++j)
-            field[0][j] = (southType == BCType::FixedValue) ? south_value_scalar : field[1][j];
-        // NORTH
-        for (int j = 0; j < nx; ++j)
-            field[ny - 1][j] = (northType == BCType::FixedValue) ? north_value_scalar : field[ny - 2][j];
+        for (int i = 0; i < ny; ++i) {
+            if (eastType == BCType::FixedValue) {
+                field[i][nx - 1] = east_value_scalar;
+            }
+            else if (eastType == BCType::FixedGradient) {
+                field[i][nx - 1] = field[i][nx - 2] + east_gradient_scalar * dx;
+            }
+            else { // ZeroGradient
+                field[i][nx - 1] = field[i][nx - 2];
+            }
+        }
     }
+
+    if (ny > 1) {
+        // SOUTH
+        for (int j = 0; j < nx; ++j) {
+            if (southType == BCType::FixedValue) {
+                field[0][j] = south_value_scalar;
+            }
+            else if (southType == BCType::FixedGradient) {
+                field[0][j] = field[1][j] - south_gradient_scalar * dy;
+                // minus because south is decreasing y
+            }
+            else { // ZeroGradient
+                field[0][j] = field[1][j];
+            }
+        }
+        // NORTH
+        for (int j = 0; j < nx; ++j) {
+            if (northType == BCType::FixedValue) {
+                field[ny - 1][j] = north_value_scalar;
+            }
+            else if (northType == BCType::FixedGradient) {
+                field[ny - 1][j] = field[ny - 2][j] + north_gradient_scalar * dy;
+            }
+            else { // ZeroGradient
+                field[ny - 1][j] = field[ny - 2][j];
+            }
+        }
+    }
+}
+
     
     // === Apply wall BCs for a vector field
     void applyWallBCs(vectorField& field, const Grid& grid) const {

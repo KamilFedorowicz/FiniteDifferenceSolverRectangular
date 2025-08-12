@@ -5,6 +5,7 @@
 #include <iostream>
 #include <algorithm>
 #include <cmath>
+#include <array>
 
 // Multiply scalar * 2D vector
 inline scalarField operator*(double scalar, const scalarField& field)
@@ -14,6 +15,30 @@ inline scalarField operator*(double scalar, const scalarField& field)
     for (size_t i = 0; i < field.size(); ++i) {
         for (size_t j = 0; j < field[0].size(); ++j) {
             result[i][j] *= scalar;
+        }
+    }
+    return result;
+}
+
+inline scalarField operator/(const scalarField& field, double scalar)
+{
+    scalarField result = field;
+
+    for (size_t i = 0; i < field.size(); ++i) {
+        for (size_t j = 0; j < field[0].size(); ++j) {
+            result[i][j] /= scalar;
+        }
+    }
+    return result;
+}
+
+inline scalarField operator/(const scalarField& field, scalarField divider)
+{
+    scalarField result = field;
+
+    for (size_t i = 0; i < field.size(); ++i) {
+        for (size_t j = 0; j < field[0].size(); ++j) {
+            result[i][j] /= divider[i][j];
         }
     }
     return result;
@@ -34,6 +59,35 @@ inline vectorField operator*(double scalar, const vectorField& field)
         for (size_t j = 0; j < field[0].size(); ++j) {
             for (size_t k = 0; k < field[0][0].size(); k++) {
                 result[i][j][k] *= scalar;
+            }
+        }
+    }
+    return result;
+}
+
+
+inline vectorField operator*(tensor tens, const vectorField& field)
+{
+    vectorField result = 0*field;
+
+    for (size_t i = 0; i < field.size(); ++i) {
+        for (size_t j = 0; j < field[0].size(); ++j) {
+            for (size_t k = 0; k < field[0][0].size(); k++) {
+                result[i][j][k] = tens[k][0]*field[i][j][0] + tens[k][1]*field[i][j][1];
+            }
+        }
+    }
+    return result;
+}
+
+inline vectorField operator*(scalarField scalar, const vectorField& field)
+{
+    vectorField result = 0*field;
+
+    for (size_t i = 0; i < field.size(); ++i) {
+        for (size_t j = 0; j < field[0].size(); ++j) {
+            for (size_t k = 0; k < field[0][0].size(); k++) {
+                result[i][j][k] = scalar[i][j]*field[i][j][k];
             }
         }
     }
@@ -92,6 +146,28 @@ inline vectorField operator/(const vectorField& vectField, const scalarField& sc
     }
     return result;
 }
+
+/*
+inline vectorField operator*(const vectorField& vectField, const scalarField& scalField)
+{
+    vectorField result = vectField;
+
+    for (size_t i = 0; i < vectField.size(); ++i)
+    {
+        for (size_t j = 0; j < vectField[0].size(); ++j)
+        {
+            result[i][j][0] *= scalField[i][j];
+            result[i][j][1] *= scalField[i][j];
+        }
+    }
+    return result;
+}
+
+inline vectorField operator*(const scalarField& scalField, const vectorField& vectField)
+{
+    return vectField * scalField;
+}
+*/
 
 inline vectorField operator/(const vectorField& vectField, double scalar)
 {
@@ -235,6 +311,30 @@ inline scalarField operator-(const scalarField& field1, const scalarField& field
     return result;
 }
 
+inline scalarField operator-(const scalarField& field1, const double& val)
+{
+    scalarField result = field1;
+
+    for (size_t i = 0; i < field1.size(); ++i) {
+        for (size_t j = 0; j < field1[0].size(); ++j) {
+            result[i][j] -= val;
+        }
+    }
+    return result;
+}
+
+inline scalarField operator-(const double& val, const scalarField& field1)
+{
+    scalarField result = scalarField(field1.size(), std::vector<double>(field1[0].size(), 0.0));
+
+    for (size_t i = 0; i < field1.size(); ++i) {
+        for (size_t j = 0; j < field1[0].size(); ++j) {
+            result[i][j] = val - field1[i][j];
+        }
+    }
+    return result;
+}
+
 inline vectorField operator+(const vectorField& field1, const vectorField& field2)
 {
     if (field1.size() != field2.size() || field1[0].size() != field2[0].size()) {
@@ -269,6 +369,46 @@ inline vectorField operator-(const vectorField& field1, const vectorField& field
             {
                 result[i][j][k] -= field2[i][j][k];
             }
+        }
+    }
+
+    return result;
+}
+
+inline scalarField operator^(const scalarField& field, const double& n) 
+{
+    scalarField result = scalarField(field.size(), std::vector<double>(field[0].size(), 1.0));
+
+    for (size_t i = 0; i < field.size(); ++i) {
+        for (size_t j = 0; j < field[0].size(); ++j) 
+        {
+            result[i][j] = std::pow(field[i][j], n);
+        }
+    }
+
+    return result;
+}
+
+inline scalarField minField(const scalarField& field, double value)
+{
+    scalarField result(field.size(), std::vector<double>(field[0].size(), 0.0));
+
+    for (size_t i = 0; i < field.size(); ++i) {
+        for (size_t j = 0; j < field[i].size(); ++j) {
+            result[i][j] = std::min(field[i][j], value);
+        }
+    }
+
+    return result;
+}
+
+inline scalarField maxField(const scalarField& field, double value)
+{
+    scalarField result(field.size(), std::vector<double>(field[0].size(), 0.0));
+
+    for (size_t i = 0; i < field.size(); ++i) {
+        for (size_t j = 0; j < field[i].size(); ++j) {
+            result[i][j] = std::max(field[i][j], value);
         }
     }
 

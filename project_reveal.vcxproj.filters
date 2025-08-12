@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\equations">
+      <UniqueIdentifier>{d050031b-3b04-4fb1-a7ae-87e9072c9725}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\cases">
+      <UniqueIdentifier>{bdf42a95-2a4f-422a-9e3f-9ec3986196c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\maths">
+      <UniqueIdentifier>{e2b5860c-52ad-463c-9405-1b1ae1ee2e93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\BCs">
+      <UniqueIdentifier>{f29a51b6-1349-4267-8a33-a5628a18bce5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="project_reveal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CSVExporter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EquationBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FieldTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Grid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Solver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceTerm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VariableMonitor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PressureEquation01.h">
+      <Filter>Header Files\equations</Filter>
+    </ClInclude>
+    <ClInclude Include="Equation02.h">
+      <Filter>Header Files\equations</Filter>
+    </ClInclude>
+    <ClInclude Include="Equation01.h">
+      <Filter>Header Files\equations</Filter>
+    </ClInclude>
+    <ClInclude Include="Case1_Equation01.h">
+      <Filter>Header Files\cases</Filter>
+    </ClInclude>
+    <ClInclude Include="Case1_Equation02.h">
+      <Filter>Header Files\cases</Filter>
+    </ClInclude>
+    <ClInclude Include="Case1_PressureEquation01.h">
+      <Filter>Header Files\cases</Filter>
+    </ClInclude>
+    <ClInclude Include="Gradient.h">
+      <Filter>Header Files\maths</Filter>
+    </ClInclude>
+    <ClInclude Include="Laplacian.h">
+      <Filter>Header Files\maths</Filter>
+    </ClInclude>
+    <ClInclude Include="MathOperators.h">
+      <Filter>Header Files\maths</Filter>
+    </ClInclude>
+    <ClInclude Include="Divergence.h">
+      <Filter>Header Files\maths</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundaryCondition.h">
+      <Filter>Header Files\BCs</Filter>
+    </ClInclude>
+    <ClInclude Include="FixedValueCondition.h">
+      <Filter>Header Files\BCs</Filter>
+    </ClInclude>
+    <ClInclude Include="MyBoundaryCondition.h">
+      <Filter>Header Files\BCs</Filter>
+    </ClInclude>
+    <ClInclude Include="PressureEquation02.h">
+      <Filter>Header Files\equations</Filter>
+    </ClInclude>
+    <ClInclude Include="Case1_PressureEquation02.h">
+      <Filter>Header Files\cases</Filter>
+    </ClInclude>
+    <ClInclude Include="printingStuff.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Case2_PressureEquation02.h">
+      <Filter>Header Files\cases</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

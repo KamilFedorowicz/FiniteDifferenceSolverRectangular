@@ -5,7 +5,8 @@
 
 enum class BCType {
     FixedValue,
-    ZeroGradient
+    ZeroGradient,
+    FixedGradient
 };
 
 enum class BoundarySide {
