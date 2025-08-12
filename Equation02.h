@@ -56,9 +56,4 @@ private:
     const std::map<std::string, scalarSourceTerm>& scalarSourceTerms;
     const std::map<std::string, vectorSourceTerm>& vectorSourceTerms;
 
-
-
-
-
-
 };
