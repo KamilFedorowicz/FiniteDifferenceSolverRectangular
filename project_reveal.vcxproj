@@ -127,6 +127,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Equation02.cpp" />
+    <ClCompile Include="EquationBase.cpp" />
     <ClCompile Include="project_reveal.cpp" />
   </ItemGroup>
   <ItemGroup>

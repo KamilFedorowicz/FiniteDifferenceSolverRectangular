@@ -71,22 +71,22 @@ void runCase1_Equation02() {
     std::vector<std::vector<double>> monitorVectorResult1 = monitorVector1.returnMonitoredVectorVariable();
     std::vector<std::vector<double>> monitorVectorResult2 = monitorVector2.returnMonitoredVectorVariable();
 
-    
+    /*
     CSVExporter::saveToCSVWithCoordinates(grid, eq.getVectorField("director"), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/CSV_files/directorField.csv");
     CSVExporter::saveToCSVWithCoordinates(grid, eq.getVectorFieldMagnitude("director"), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/CSV_files/director_mag.csv");
     CSVExporter::saveToCSVWithCoordinates(grid, eq.getScalarField("temperature"), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/CSV_files/temp_field.csv");
     CSVExporter::saveMonitoredVariable(monitorScalarResult1, "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/CSV_files/temp_monitor.csv");
     CSVExporter::saveMonitoredVariable(getVectorComponent(monitorVectorResult1,0), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/CSV_files/dir_monitor1.csv");
     CSVExporter::saveMonitoredVariable(getVectorComponent(monitorVectorResult2,0), "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/CSV_files/dir_monitor2.csv");
-    
+    */
 
 
     
-    /*
+    
      CSVExporter::saveToCSVWithCoordinates(grid, eq.getVectorField("director"), "C:/Users/kfedorowicz/source/repos/project_reveal/csv_files/dir_field.csv");
      CSVExporter::saveToCSVWithCoordinates(grid, eq.getVectorFieldMagnitude("director"), "C:/Users/kfedorowicz/source/repos/project_reveal/csv_files/dir_mag.csv");
      CSVExporter::saveToCSVWithCoordinates(grid, eq.getScalarField("temperature"), "C:/Users/kfedorowicz/source/repos/project_reveal/csv_files/temp.csv");
-     */
+     
      
      
 }

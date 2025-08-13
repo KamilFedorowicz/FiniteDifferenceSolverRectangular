@@ -147,28 +147,6 @@ inline vectorField operator/(const vectorField& vectField, const scalarField& sc
     return result;
 }
 
-/*
-inline vectorField operator*(const vectorField& vectField, const scalarField& scalField)
-{
-    vectorField result = vectField;
-
-    for (size_t i = 0; i < vectField.size(); ++i)
-    {
-        for (size_t j = 0; j < vectField[0].size(); ++j)
-        {
-            result[i][j][0] *= scalField[i][j];
-            result[i][j][1] *= scalField[i][j];
-        }
-    }
-    return result;
-}
-
-inline vectorField operator*(const scalarField& scalField, const vectorField& vectField)
-{
-    return vectField * scalField;
-}
-*/
-
 inline vectorField operator/(const vectorField& vectField, double scalar)
 {
     vectorField result = vectField;
@@ -184,7 +162,7 @@ inline vectorField operator/(const vectorField& vectField, double scalar)
     return result;
 }
 
-scalarField getVectorComponent(vectorField field, int n)
+inline scalarField getVectorComponent(vectorField field, int n)
 {
     scalarField result(field.size(), std::vector<double>(field[0].size(), 0.0));
     if(n<0 || n>1){
@@ -203,7 +181,7 @@ scalarField getVectorComponent(vectorField field, int n)
     return result;
 }
 
-std::vector<double> getVectorComponent(const std::vector<std::vector<double>>& vectField, int n){
+inline std::vector<double> getVectorComponent(const std::vector<std::vector<double>>& vectField, int n){
     std::vector<double> result(vectField.size(), 0);
     for(int i=0; i<vectField.size(); i++){
         result[i] = vectField[i][n];
@@ -211,7 +189,7 @@ std::vector<double> getVectorComponent(const std::vector<std::vector<double>>& v
     return result;
 }
 
-scalarField magn(const vectorField& field)
+inline scalarField magn(const vectorField& field)
 {
     scalarField result(field.size(), std::vector<double>(field[0].size(), 0.0));
     
@@ -226,7 +204,7 @@ scalarField magn(const vectorField& field)
     return result;
 }
 
-double computeRootMeanSquaredValueOfVectorField(const vectorField& vectField){
+inline  double computeRootMeanSquaredValueOfVectorField(const vectorField& vectField){
     double sumSquares = 0.0;
     const scalarField vectorFieldMagnitude = magn(vectField);
 
@@ -242,7 +220,7 @@ double computeRootMeanSquaredValueOfVectorField(const vectorField& vectField){
     return std::sqrt(sumSquares / static_cast<double>(ny * nx));
 }
 
-double computeRootMeanSquaredValueOfScalarField(const scalarField& scalField){
+inline double computeRootMeanSquaredValueOfScalarField(const scalarField& scalField){
     double sumSquares = 0.0;
 
     const size_t ny = scalField.size();

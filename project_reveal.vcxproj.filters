@@ -30,6 +30,12 @@
     <ClCompile Include="project_reveal.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="EquationBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Equation02.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CSVExporter.h">
