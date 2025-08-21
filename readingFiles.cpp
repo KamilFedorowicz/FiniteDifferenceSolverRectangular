@@ -121,3 +121,56 @@ std::string getValueFromFile(const std::string &filename, const std::string &key
 
     throw std::runtime_error("Key not found: " + key);
 }
+
+
+// string -> BCType
+BCType parseBCType(const std::string &s) {
+    if (s == "FixedValue") return BCType::FixedValue;
+    if (s == "ZeroGradient") return BCType::ZeroGradient;
+    throw std::runtime_error("Unknown BCType: " + s);
+}
+
+std::map<std::string, std::string> parseFile(const std::string &filename) {
+    std::ifstream infile(filename);
+    if (!infile) throw std::runtime_error("Could not open " + filename);
+
+    std::map<std::string, std::string> config;
+    std::string key, value;
+    while (infile >> key >> value) {
+        if (!value.empty() && value.back() == ';') value.pop_back();
+        config[key] = value;
+    }
+    return config;
+}
+
+void setBC(MyBoundaryCondition &bc, const std::string &dir,
+           const std::map<std::string, std::string> &config)
+{
+    std::string typeKey  = dir + "Type";   // e.g. "northType"
+    std::string valueKey = dir + "Value";  // e.g. "northValue"
+
+    auto typeIt = config.find(typeKey);
+    if (typeIt == config.end()) {
+        std::cout << "Missing key: " + typeKey << std::endl;
+        return;
+    }
+
+    BCType type = parseBCType(typeIt->second);
+
+    if (dir == "north") bc.setNorthType(type);
+    else if (dir == "south") bc.setSouthType(type);
+    else if (dir == "west") bc.setWestType(type);
+    else if (dir == "east") bc.setEastType(type);
+
+    if (type == BCType::FixedValue) {
+        auto valIt = config.find(valueKey);
+        if (valIt == config.end()) {
+            throw std::runtime_error("Missing key: " + valueKey);
+        }
+        double val = std::stod(valIt->second);
+        if (dir == "north") bc.setNorthValue(val);
+        else if (dir == "south") bc.setSouthValue(val);
+        else if (dir == "west") bc.setWestValue(val);
+        else if (dir == "east") bc.setEastValue(val);
+    }
+}

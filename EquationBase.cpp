@@ -1,7 +1,5 @@
 #include "EquationBase.h"
-#include <iostream>
-#include <cmath>
-#include <stdexcept>
+
 
 // Constructor
 EquationBase::EquationBase(Grid& grid_) : grid(grid_) {}
@@ -50,8 +48,6 @@ void EquationBase::checkIfScalarFieldsAreInitialised() {
         const std::string& name = it.first;
         const auto* fieldPtr = it.second;
 
-        std::cout << "Name: " << name << ", ptr: " << fieldPtr << std::endl;
-
         if (!fieldPtr) {
             std::cout << "Field " << name << " is not initialised!" << std::endl;
             throw std::runtime_error("Field not initialised!.");
@@ -68,8 +64,6 @@ void EquationBase::checkIfVectorFieldsAreInitialsed() {
     for (const auto& it : vectorFields) {
         const std::string& name = it.first;
         const auto* fieldPtr = it.second;
-
-        std::cout << "Name: " << name << ", ptr: " << fieldPtr << std::endl;
 
         if (!fieldPtr) {
             std::cout << "Field " << name << " is not initialised!" << std::endl;

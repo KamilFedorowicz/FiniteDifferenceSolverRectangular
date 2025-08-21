@@ -1,0 +1,10 @@
+ny 50;
+nx 45;
+
+min_x 0;
+min_y 0;
+max_x 1;
+max_y 1;
+
+
+

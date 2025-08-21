@@ -9,15 +9,19 @@
 #include "EquationBase.h"
 #include "MathOperators.h"
 
+
 class Equation02 : public EquationBase {
 public:
     Equation02(
         Grid& grid,
-        double diffusionCoeff_dir,
-        double diffusionCoeff_temp,
-        const std::map<std::string, scalarSourceTerm>& scalarSourceTerms_,
-        const std::map<std::string, vectorSourceTerm>& vectorSourceTerms_
+    std::map<std::string, double> constantsMap
+        //double diffusionCoeff_dir,
+        //double diffusionCoeff_temp
     );
+    
+    std::vector<std::string> getScalarVariableNames() const override;
+    std::vector<std::string> getVectorVariableNames() const override;
+    static std::vector<std::string> getConstantsNames();
 
     void step(
         std::map<std::string, const BoundaryCondition*>& scalar_bcs,
@@ -36,7 +40,4 @@ private:
 
     scalarField temperature;
     scalarField dTemperature_dt;
-
-    const std::map<std::string, scalarSourceTerm>& scalarSourceTerms;
-    const std::map<std::string, vectorSourceTerm>& vectorSourceTerms;
 };

@@ -1,0 +1,3 @@
+D_director 0.1;
+D_temperature 0.1;
+EquationName Equation02;

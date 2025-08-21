@@ -72,7 +72,7 @@ void runCase1_Equation01(){
     solver.addScalarVariableMonitor(monitor2);
     
     
-    solver.solve(100, 0.0001, scalar_bcs, vector_bcs);
+    solver.solve(50, 0.0001, scalar_bcs, vector_bcs);
     
     
     // === Export result ===

@@ -1,22 +1,33 @@
 #include "Equation02.h"
+#include "EquationFactory.h"
 
 Equation02::Equation02(
     Grid& grid,
-    double diffusionCoeff_dir,
-    double diffusionCoeff_temp,
-    const std::map<std::string, scalarSourceTerm>& scalarSourceTerms_,
-    const std::map<std::string, vectorSourceTerm>& vectorSourceTerms_
+    std::map<std::string, double> constantsMap
 )
     : grid(grid),
-      D_director(diffusionCoeff_dir),
-      D_temperature(diffusionCoeff_temp),
-      EquationBase(grid),
-      scalarSourceTerms(scalarSourceTerms_),
-      vectorSourceTerms(vectorSourceTerms_)
+      EquationBase(grid)
 {
+    // read constants from the map
+    D_director = constantsMap.at("D_director");
+    D_temperature = constantsMap.at("D_temperature");
     // Declare fields that we solve for
     vectorFields["director"] = &director;
     scalarFields["temperature"] = &temperature;
+}
+
+
+std::vector<std::string> Equation02::getScalarVariableNames() const {
+    return {"temperature"};
+}
+
+std::vector<std::string> Equation02::getVectorVariableNames() const {
+    return {"director"};
+}
+ 
+
+std::vector<std::string> Equation02::getConstantsNames() {
+    return {"D_director", "D_temperature"};
 }
 
 void Equation02::step(
@@ -26,8 +37,7 @@ void Equation02::step(
 )
 {
     // Computing scalar derivatives
-    dTemperature_dt = D_temperature * Laplacian::compute(grid, temperature)
-                    + scalarSourceTerms.at("temperature").compute(grid);
+    dTemperature_dt = D_temperature * Laplacian::compute(grid, temperature);
 
     dDirector_dt = D_director * Laplacian::compute(grid, director)
                  - (director & director) * Laplacian::compute(grid, director) * 0;
@@ -44,3 +54,6 @@ void Equation02::step(
 
     //updateFields(scalar_bcs, vector_bcs, dt);
 }
+
+REGISTER_EQUATION(Equation02);
+

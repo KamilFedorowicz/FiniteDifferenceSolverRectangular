@@ -58,84 +58,33 @@ void runCase1_Equation02() {
     }
     std::unique_ptr<EquationBase> eq = EquationFactoryRegistry::instance().create(EquationUtils::to_string(equationName), grid, equationFile);
 
-    // defining temperature field
-    double initialValueTemp = 0.0;
-    scalarField initialTemperatureField(ny, std::vector<double>(nx, initialValueTemp));
-    eq->initialiseField("temperature", initialTemperatureField);
     
-    std::string tempFile = "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/simulationFiles/fields/temperature.txt";
-    std::string tempTest = getValueFromFile(tempFile, "northType");
-    std::cout << "temp test is: " << tempTest << std::endl;
+    // ----------- initial and boundary conditions for the scalar fields
+    std::vector<std::string> scalarFieldsList = eq->getScalarVariableNames();
     
-    MyBoundaryCondition bc_temperature;
-    
-    std::vector<std::string> BC_walls = {"north", "south", "west", "east"};
-        
-    if(getValueFromFile(tempFile, "northType") == "FixedValue")
-    {
-        bc_temperature.setNorthType(BCType::FixedValue);
-        double val = std::stod(getValueFromFile(tempFile, "northValue"));
-        bc_temperature.setNorthValue(val);
-    }else if(getValueFromFile(tempFile, "northType") == "ZeroGradient"){
-        bc_temperature.setNorthType(BCType::ZeroGradient);
-    }else{
-        std::cout << "Unknown BC at the north face!" << std::endl;
-        return ;
-    }
-    
-    if(getValueFromFile(tempFile, "southType") == "FixedValue")
-    {
-        bc_temperature.setSouthType(BCType::FixedValue);
-        double val = std::stod(getValueFromFile(tempFile, "southValue"));
-        bc_temperature.setSouthValue(val);
-    }else if(getValueFromFile(tempFile, "southType") == "ZeroGradient"){
-        bc_temperature.setSouthType(BCType::ZeroGradient);
-    }else{
-        std::cout << "Unknown BC at the south face!" << std::endl;
-        return ;
-    }
-    
-    if(getValueFromFile(tempFile, "westType") == "FixedValue")
-    {
-        bc_temperature.setWestType(BCType::FixedValue);
-        double val = std::stod(getValueFromFile(tempFile, "westValue"));
-        bc_temperature.setWestValue(val);
-    }else if(getValueFromFile(tempFile, "westType") == "ZeroGradient"){
-        bc_temperature.setWestType(BCType::ZeroGradient);
-    }else{
-        std::cout << "Unknown BC at the west face!" << std::endl;
-        return ;
-    }
-    
-    if(getValueFromFile(tempFile, "eastType") == "FixedValue")
-    {
-        bc_temperature.setEastType(BCType::FixedValue);
-        double val = std::stod(getValueFromFile(tempFile, "eastValue"));
-        bc_temperature.setEastValue(val);
-    }else if(getValueFromFile(tempFile, "eastType") == "ZeroGradient"){
-        bc_temperature.setEastType(BCType::ZeroGradient);
-    }else{
-        std::cout << "Unknown BC at the west face!" << std::endl;
-        return ;
-    }
-    
-    
-
-    // old code
-    /*
-    bc_temperature.setSouthType(BCType::FixedValue);
-    bc_temperature.setSouthValue(1);
-    bc_temperature.setWestType(BCType::FixedValue);
-    bc_temperature.setWestValue(0);
-    bc_temperature.setEastType(BCType::FixedValue);
-    bc_temperature.setEastValue(0);
-    */
-
     std::map<std::string, const BoundaryCondition*> scalar_bcs;
-    scalar_bcs["temperature"] = &bc_temperature;
+    // iterate over scalar fields and set up boundary conditions according to the defining file
+    for(std::string scalField: scalarFieldsList)
+    {
+        std::string readFile = "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/simulationFiles/fields/" + scalField + ".txt";
+        double initialValue = std::stod(getValueFromFile(readFile, "initialValue")); // read initial value
+        
+        scalarField initialField(ny, std::vector<double>(nx, initialValue)); // create an initial field
+        eq->initialiseField(scalField, initialField); // use the field from line above to initialise
+        
+        MyBoundaryCondition bc_scalar;
+        auto BC_config = parseFile(readFile);
+        
+        for (auto &dir : {"north", "south", "west", "east"})
+        {
+            setBC(bc_scalar, dir, BC_config);
+        }
+        scalar_bcs[scalField] = &bc_scalar;
+    }
     
-    
-    // defoning director field
+
+    // defining director field
+    std::vector<std::string> vectorFieldsList = eq->getVectorVariableNames();
     vectorField initialDirectorField(ny, std::vector<std::vector<double>>(nx, std::vector<double>{1,0}));
     eq->initialiseField("director", initialDirectorField);
     

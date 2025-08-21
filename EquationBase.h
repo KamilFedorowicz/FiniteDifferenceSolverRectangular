@@ -5,7 +5,25 @@
 #include "Grid.h"
 #include "BoundaryCondition.h"
 #include "FieldTypes.h"
+#include <iostream>
+#include <cmath>
+#include <stdexcept>
 
+
+enum class EquationNames {
+    Equation02,
+    Empty
+};
+
+namespace EquationUtils {
+    inline std::string to_string(EquationNames eq) {
+        switch (eq) {
+            case EquationNames::Equation02: return "Equation02";
+            case EquationNames::Empty:      return "Empty";
+            default:                        return "Unknown";
+        }
+    }
+}
 class EquationBase {
 public:
     EquationBase(Grid& grid_);
@@ -20,6 +38,14 @@ public:
                        std::map<std::string, const BoundaryCondition*>& vector_bcs,
                        double dt);
 
+    virtual std::vector<std::string> getScalarVariableNames() const {
+        return {};
+    }
+    
+    virtual std::vector<std::string> getVectorVariableNames() const {
+        return {};
+    }
+    
     void initialiseField(std::string name, const scalarField field);
     void initialiseField(std::string name, const vectorField field);
 

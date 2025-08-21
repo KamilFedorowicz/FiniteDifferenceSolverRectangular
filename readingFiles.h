@@ -4,6 +4,7 @@
 #include <vector>
 #include "Grid.h"
 #include "EquationBase.h"
+#include "MyBoundaryCondition.h"
 
 // Function declarations
 
@@ -20,3 +21,10 @@ std::map<std::string, double> readConstantsFromFile(
 EquationNames readEquationName(const std::string& filename);
 
 std::string getValueFromFile(const std::string &filename, const std::string &key);
+
+BCType parseBCType(const std::string &s);
+
+std::map<std::string, std::string> parseFile(const std::string &filename);
+
+void setBC(MyBoundaryCondition &bc, const std::string &dir,
+           const std::map<std::string, std::string> &config);

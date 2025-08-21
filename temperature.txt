@@ -1,0 +1,10 @@
+initialValue 0.0;
+fieldType scalarField;
+northType FixedValue;
+southType FixedValue;
+westType FixedValue;
+eastType FixedValue;
+northValue 1;
+southValue 1;
+westValue 0;
+eastValue 0;

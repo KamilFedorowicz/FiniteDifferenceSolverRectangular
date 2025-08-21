@@ -353,12 +353,12 @@ inline vectorField operator-(const vectorField& field1, const vectorField& field
     return result;
 }
 
-inline scalarField operator^(const scalarField& field, const double& n) 
+inline scalarField operator^(const scalarField& field, const double& n)
 {
     scalarField result = scalarField(field.size(), std::vector<double>(field[0].size(), 1.0));
 
     for (size_t i = 0; i < field.size(); ++i) {
-        for (size_t j = 0; j < field[0].size(); ++j) 
+        for (size_t j = 0; j < field[0].size(); ++j)
         {
             result[i][j] = std::pow(field[i][j], n);
         }
