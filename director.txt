@@ -1,0 +1,10 @@
+initialValue {1.0, 0};
+fieldType vectorField;
+northType FixedValue;
+southType FixedValue;
+westType FixedValue;
+eastType FixedValue;
+northValue {1.0, 0.0};
+southValue {1.0, 0.0};
+westValue {0.0, 1.0};
+eastValue {0.0, 1.0};

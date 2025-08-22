@@ -61,8 +61,9 @@ void runCase1_Equation02() {
     
     // ----------- initial and boundary conditions for the scalar fields
     std::vector<std::string> scalarFieldsList = eq->getScalarVariableNames();
-    
     std::map<std::string, const BoundaryCondition*> scalar_bcs;
+    std::map<std::string, MyBoundaryCondition> scalar_bcs_storage;
+    
     // iterate over scalar fields and set up boundary conditions according to the defining file
     for(std::string scalField: scalarFieldsList)
     {
@@ -77,14 +78,47 @@ void runCase1_Equation02() {
         
         for (auto &dir : {"north", "south", "west", "east"})
         {
-            setBC(bc_scalar, dir, BC_config);
+            setScalarBC(bc_scalar, dir, BC_config);
         }
-        scalar_bcs[scalField] = &bc_scalar;
+        // store the object by value in the storage map
+        scalar_bcs_storage[scalField] = bc_scalar;
+
+        // and keep a stable pointer to it in your original map
+        scalar_bcs[scalField] = &scalar_bcs_storage.at(scalField);
     }
     
 
     // defining director field
     std::vector<std::string> vectorFieldsList = eq->getVectorVariableNames();
+    std::map<std::string, const BoundaryCondition*> vector_bcs;
+    std::map<std::string, MyBoundaryCondition> vector_bcs_storage; // owns the BC by value. it guarantees that the objects live as long as the map, not just for the loop duration
+    
+    
+    for(std::string vectField: vectorFieldsList)
+    {
+        std::string readFile = "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/simulationFiles/fields/" + vectField + ".txt";
+        std::string initialValueString = getValueFromFile(readFile, "initialValue");
+        std::vector<double> initialValue = convertStringToVector(initialValueString);
+        
+        vectorField initialVectorField(ny, std::vector<std::vector<double>>(nx, initialValue));
+        eq->initialiseField(vectField, initialVectorField);
+        
+        MyBoundaryCondition bc_vector;
+        auto BC_config = parseFile(readFile);
+        
+        for (auto &dir : {"north", "south", "west", "east"})
+        {
+            setVectorBC(bc_vector, dir, BC_config);
+        }
+        // store the object by value in the storage map
+        vector_bcs_storage[vectField] = bc_vector;
+
+        // and keep a stable pointer to it in your original map
+        vector_bcs[vectField] = &vector_bcs_storage.at(vectField);
+    }
+    
+    
+    /*
     vectorField initialDirectorField(ny, std::vector<std::vector<double>>(nx, std::vector<double>{1,0}));
     eq->initialiseField("director", initialDirectorField);
     
@@ -98,8 +132,8 @@ void runCase1_Equation02() {
     bc_director.setWestValue({ 0,1 });
     bc_director.setEastValue({ 0,1 });
     
-    std::map<std::string, const BoundaryCondition*> vector_bcs;
     vector_bcs["director"] = &bc_director;
+    */
     
 
     // defining monitors

@@ -26,5 +26,10 @@ BCType parseBCType(const std::string &s);
 
 std::map<std::string, std::string> parseFile(const std::string &filename);
 
-void setBC(MyBoundaryCondition &bc, const std::string &dir,
+void setScalarBC(MyBoundaryCondition &bc, const std::string &dir,
            const std::map<std::string, std::string> &config);
+
+void setVectorBC(MyBoundaryCondition &bc, const std::string &dir,
+                 const std::map<std::string, std::string> &config);
+
+std::vector<double> convertStringToVector(std::string str);
