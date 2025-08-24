@@ -29,6 +29,9 @@ int main() {
 
     runCase1_Equation02();
 
+    
+    
+    std::cout << "Simulation ended!" << std::endl;
 
 
     return 0;

@@ -117,27 +117,14 @@ void runCase1_Equation02() {
         vector_bcs[vectField] = &vector_bcs_storage.at(vectField);
     }
     
-    
-    /*
-    vectorField initialDirectorField(ny, std::vector<std::vector<double>>(nx, std::vector<double>{1,0}));
-    eq->initialiseField("director", initialDirectorField);
-    
-    MyBoundaryCondition bc_director;
-    bc_director.setNorthType(BCType::FixedValue);
-    bc_director.setSouthType(BCType::FixedValue);
-    bc_director.setWestType(BCType::FixedValue);
-    bc_director.setEastType(BCType::FixedValue);
-    bc_director.setNorthValue({ 1,0 });
-    bc_director.setSouthValue({ 1,0 });
-    bc_director.setWestValue({ 0,1 });
-    bc_director.setEastValue({ 0,1 });
-    
-    vector_bcs["director"] = &bc_director;
-    */
-    
-
-    // defining monitors
     Solver solver(*eq, grid);
+    
+    // defining monitors
+    
+    // use the tuple from the lines below to initialise monitors
+    std::string monitorFile = "/Users/Kamil/Desktop/cpp/work_udemy/my_solver2/my_solver2/simulationFiles/VariableMonitors.txt";
+    std::vector<std::tuple<std::string, double, double>> result = readMonitors(monitorFile);
+    
     VariableMonitor monitorScalar1(grid, 0.5, 0.4, "temperature");
     solver.addScalarVariableMonitor(monitorScalar1);
     
@@ -147,6 +134,7 @@ void runCase1_Equation02() {
     VariableMonitor monitorVector2(grid, 0.5, 0.5, "director");
     solver.addVectorVariableMonitor(monitorVector2);
     
+    // run the simulation
     solver.solve(50, 0.001, scalar_bcs, vector_bcs); // arguments: steps, dt, BCs
     
     std::vector<double> monitorScalarResult1 = monitorScalar1.returnMonitoredScalarVariable();

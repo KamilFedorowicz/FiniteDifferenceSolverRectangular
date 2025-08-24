@@ -1,0 +1,6 @@
+temperature, 0.5, 0.4;
+director, 0.5, 0.4;
+director, 0.5, 0.5;
+
+
+

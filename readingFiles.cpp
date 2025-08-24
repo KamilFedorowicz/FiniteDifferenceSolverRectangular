@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <stdexcept>
+#include <tuple>
 
 // Reads mesh info from a file into a map
 std::map<std::string, double> readMeshInfo(const std::string& filename) {
@@ -263,6 +264,36 @@ std::vector<double> convertStringToVector(std::string s)
         result.push_back(std::stod(token));
     }
     
+    return result;
+}
+
+std::vector<std::tuple<std::string, double, double>> readMonitors(std::string filename)
+{
+    std::ifstream file(filename);
     
+    if (!file.is_open()) {
+        throw std::runtime_error("Could not open monitor info file: " + filename);
+    }
+    
+    std::vector<std::tuple<std::string, double, double>> result{};
+    
+    std::string line;
+    
+    while (std::getline(file, line)) {
+        std::istringstream iss(line);
+        if (line.empty()) continue;
+
+        std::string variable;
+        double x, y;
+
+        std::getline(iss, variable, ',');  // read up to first comma
+        iss >> x;
+        iss.ignore(std::numeric_limits<std::streamsize>::max(), ',');               // discard until it finds a delimiter ','
+        iss >> y;
+        iss.ignore(std::numeric_limits<std::streamsize>::max(), ';');               // skip semicolon (and maybe a space)
+
+        result.emplace_back(variable, x, y);
+        
+    }
     return result;
 }
