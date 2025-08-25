@@ -35,3 +35,7 @@ void setVectorBC(MyBoundaryCondition &bc, const std::string &dir,
 std::vector<double> convertStringToVector(std::string str);
 
 std::vector<std::tuple<std::string, double, double>> readMonitors(std::string filename);
+
+std::vector<std::tuple<std::string, std::string>> fieldsToSave(std::string filename);
+
+std::map<std::string, double> readSimulationInfo(const std::string& filename);

@@ -1,0 +1,2 @@
+iterations, 50;
+dt, 0.001;

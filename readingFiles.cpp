@@ -4,6 +4,30 @@
 #include <sstream>
 #include <stdexcept>
 #include <tuple>
+#include <stdexcept>
+#include <algorithm>
+#include <string>
+#include <cctype>
+
+// trim from start (in place)
+inline void ltrim(std::string &s) {
+    s.erase(s.begin(),
+            std::find_if(s.begin(), s.end(),
+                         [](unsigned char ch) { return !std::isspace(ch); }));
+}
+
+// trim from end (in place)
+inline void rtrim(std::string &s) {
+    s.erase(std::find_if(s.rbegin(), s.rend(),
+                         [](unsigned char ch) { return !std::isspace(ch); }).base(),
+            s.end());
+}
+
+// trim from both ends (in place)
+inline void trim(std::string &s) {
+    ltrim(s);
+    rtrim(s);
+}
 
 // Reads mesh info from a file into a map
 std::map<std::string, double> readMeshInfo(const std::string& filename) {
@@ -296,4 +320,81 @@ std::vector<std::tuple<std::string, double, double>> readMonitors(std::string fi
         
     }
     return result;
+}
+
+// the first string is the field name, the second is the file path to save
+std::vector<std::tuple<std::string, std::string>> fieldsToSave(std::string filename)
+{
+    std::ifstream file(filename);
+    if (!file.is_open()) {
+        throw std::runtime_error("Could not open saving fields info file: " + filename);
+    }
+    
+    std::vector<std::tuple<std::string, std::string>> result{};
+    std::string line;
+    while (std::getline(file, line))
+    {
+        if (line.empty()) continue;
+        std::istringstream iss(line);
+        std::string variable, filePath;
+        
+        // variable up to comma
+        if (!std::getline(iss, variable, ',')) continue;
+
+        // filePath up to semicolon
+        if (!std::getline(iss, filePath, ';')) continue;
+
+        // trim spaces
+        trim(variable);
+        trim(filePath);
+
+        result.emplace_back(variable, filePath);
+        
+    }
+    return result;
+    
+}
+
+
+std::map<std::string, double> readSimulationInfo(const std::string& filename)
+{
+    std::ifstream file(filename);
+    if (!file.is_open()) {
+        throw std::runtime_error("Could not open file: " + filename);
+    }
+
+    std::map<std::string, double> simulationInfoMap;
+    std::string line;
+
+    while (std::getline(file, line)) {
+        if (line.empty()) continue;
+
+        std::istringstream iss(line);
+        std::string name, valueStr;
+
+        // read name up to comma
+        if (!std::getline(iss, name, ',')) continue;
+
+        // read value up to semicolon
+        if (!std::getline(iss, valueStr, ';')) continue;
+
+        // trim spaces from both ends
+        trim(name);
+        trim(valueStr);
+
+        // convert value to double
+        double value = std::stod(valueStr);
+
+        // insert into map
+        simulationInfoMap[name] = value;
+    }
+    
+    // check required keys
+    if (simulationInfoMap.find("iterations") == simulationInfoMap.end() ||
+        simulationInfoMap.find("dt") == simulationInfoMap.end())
+    {
+        throw std::runtime_error("Simulation info incomplete: 'iterations' or 'dt' missing");
+    }
+
+    return simulationInfoMap;
 }
