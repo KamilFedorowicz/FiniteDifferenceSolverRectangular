@@ -9,29 +9,30 @@
 #include "EquationBase.h"
 #include "MathOperators.h"
 
-// detailed implementation of the equation
 
 class Equation01 : public EquationBase {
 public:
-    Equation01(Grid& grid,
-               double diffusionCoeff,
-               const std::map<std::string, scalarSourceTerm>& scalarSourceTerms_,
-               const std::map<std::string, vectorSourceTerm>& vectorSourceTerms_);
+    Equation01(
+        Grid& grid,
+    std::map<std::string, double> constantsMap
+    );
+    
+    std::vector<std::string> getScalarVariableNames() const override;
+    std::vector<std::string> getVectorVariableNames() const override;
+    static std::vector<std::string> getConstantsNames();
 
-    void step(std::map<std::string, const BoundaryCondition*>& scalar_bcs,
-              std::map<std::string, const BoundaryCondition*>& vector_bcs,
-              double dt) override;
+    void step(
+        std::map<std::string, const BoundaryCondition*>& scalar_bcs,
+        std::map<std::string, const BoundaryCondition*>& vector_bcs,
+        double dt
+    ) override;
 
 private:
     Grid& grid;
-    double D;
+
+    double D_temperature;
+    double dt;
 
     scalarField temperature;
-    scalarField pressure;
-
     scalarField dTemperature_dt;
-    scalarField dPressure_dt;
-
-    const std::map<std::string, scalarSourceTerm>& scalarSourceTerms;
-    const std::map<std::string, vectorSourceTerm>& vectorSourceTerms;
 };

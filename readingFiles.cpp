@@ -111,12 +111,25 @@ EquationNames readEquationName(const std::string& filename) {
         if (!valueStr.empty() && valueStr.back() == ';') {
             valueStr.pop_back();
         }
-
+        
+        if (name == "EquationName") {
+            return toEquationName(valueStr);
+        }
+        
+        /*
+        if (name == "EquationName") {
+            if (valueStr == "Equation01") {
+                return EquationNames::Equation01;
+            }
+        }
+        
+         
         if (name == "EquationName") {
             if (valueStr == "Equation02") {
                 return EquationNames::Equation02;
             }
         }
+         */
     }
 
     return EquationNames::Empty;

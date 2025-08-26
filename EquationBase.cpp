@@ -1,5 +1,17 @@
 #include "EquationBase.h"
 
+EquationNames toEquationName(const std::string& str) {
+    static const std::map<std::string, EquationNames> lookup = {
+        {"Equation01", EquationNames::Equation01},
+        {"Equation02", EquationNames::Equation02}
+    };
+
+    auto it = lookup.find(str);
+    if (it != lookup.end()) {
+        return it->second;
+    }
+    return EquationNames::Empty; // fallback
+}
 
 // Constructor
 EquationBase::EquationBase(Grid& grid_) : grid(grid_) {}

@@ -12,15 +12,19 @@
 
 enum class EquationNames {
     Equation02,
+    Equation01,
     Empty
 };
+
+EquationNames toEquationName(const std::string& str);
 
 namespace EquationUtils {
     inline std::string to_string(EquationNames eq) {
         switch (eq) {
             case EquationNames::Equation02: return "Equation02";
-            case EquationNames::Empty:      return "Empty";
-            default:                        return "Unknown";
+            case EquationNames::Equation01: return "Equation01";
+            //case EquationNames::Empty:      return "Empty";
+            default:                        return "Empty";
         }
     }
 }
