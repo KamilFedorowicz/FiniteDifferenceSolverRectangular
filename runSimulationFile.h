@@ -15,6 +15,7 @@
 #include <iostream>
 #include <string>
 #include <filesystem>
+#include "VTKExporter.h"
 
 namespace fs = std::filesystem;
 
@@ -130,8 +131,8 @@ void runSimulation() {
     std::map<std::string, double> simulationSetup = readSimulationInfo(cwdStr + "/simulationSetup.txt");
     solver.solve(simulationSetup.at("iterations"), simulationSetup.at("dt"), scalar_bcs, vector_bcs); // arguments: steps, dt, BCs
     
-    
-    std::vector<std::tuple<std::string, std::string>> savedFields = fieldsToSave(cwdStr + "/savingFields.txt");
+    // saving fields to csv format
+    std::vector<std::tuple<std::string, std::string>> savedFields = fieldsToSave(cwdStr + "/savingFieldsCSV.txt");
 
     for(std::tuple<std::string, std::string> fieldToSave: savedFields)
     {
@@ -148,8 +149,26 @@ void runSimulation() {
         }
         
     }
+    
+    // saving fields to VTK format
+    
+    std::vector<std::tuple<std::string, std::string>> savedFieldsVTK = fieldsToSave(cwdStr + "/savingFieldsVTK.txt");
 
+    for(std::tuple<std::string, std::string> fieldToSave: savedFieldsVTK)
+    {
+        std::string fieldName = std::get<0>(fieldToSave);
+        std::string pathName = std::get<1>(fieldToSave);
+        
+        if(std::find(scalarFieldsList.begin(), scalarFieldsList.end(), fieldName) != scalarFieldsList.end())
+        {
+            VTKExporter::saveScalarField(grid, eq->getScalarField(fieldName), pathName, fieldName);
+        }
+        if(std::find(vectorFieldsList.begin(), vectorFieldsList.end(), fieldName) != vectorFieldsList.end())
+        {
+            VTKExporter::saveVectorField(grid, eq->getVectorField(fieldName), pathName, fieldName);
+        }
 
-     
-     
+        
+    }
+    
 }
